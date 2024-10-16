@@ -1,14 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
-  <title>Frontend Mentor | E-commerce product page</title>
-  <link rel="stylesheet" href="main.css">
-</head>
-<body>
-  Collections
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./images/favicon-32x32.png"
+    />
+    <title>Frontend Mentor | E-commerce product page</title>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <header class="top-header">
+      <div
+        id="navigation-overlay"
+        class="navigation-overlay"
+        aria-hidden="true"
+      ></div>
+      <div class="logo-container">
+        <img class="logo" src="images/logo.svg" alt="Brand logo" />
+        <nav id="navigation" class="navigation" aria-label="Site">
+          <button
+            id="open-menu-button"
+            class="open-menu-button"
+            aria-expanded="false"
+            aria-hidden="false"
+            aria-labelledby="navigation-label"
+          >
+            <span id="navigation-label" hidden>Navigation</span>
+            <img
+              src="images/icon-menu.svg"
+              alt="Hamburger open menu"
+              aria-hidden="false"
+            />
+          </button>
+          <div
+            id="navigation-content"
+            class="navigation-content"
+            role="dialog"
+            aria-labelledby="navigation-label"
+          >
+            <button
+              id="close-menu-button"
+              class="close-menu-button"
+              aria-label="Close"
+            >
+              <img
+                class="menu-button"
+                src="images/icon-close.svg"
+                aria-hidden="false"
+              />
+            </button>
+            <ul class="navigation-links">
+              <li class="navigation-item">
+                <a class="navigation-link" href="#">Collections</a>
+              </li>
+              <li class="navigation-item">
+                <a class="navigation-link" href="#">Men</a>
+              </li>
+              <li class="navigation-item">
+                <a class="navigation-link" href="#">Women</a>
+              </li>
+              <li class="navigation-item">
+                <a class="navigation-link" href="#">About</a>
+              </li>
+              <li class="navigation-item">
+                <a class="navigation-link" href="#">Contact</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <div class="user-container">
+        <img id="cart" class="cart" src="images/icon-cart.svg" alt="Cart" />
+        <img
+          id="avatar"
+          class="avatar"
+          src="images/image-avatar.png"
+          alt="Avatar"
+        />
+      </div>
+    </header>
+    <!-- Collections
   Men
   Women
   About
@@ -26,7 +102,7 @@
   $250.00
 
   0
-  Add to cart
-  <script src="main.js"></script>
-</body>
+  Add to cart -->
+    <script src="main.js"></script>
+  </body>
 </html>

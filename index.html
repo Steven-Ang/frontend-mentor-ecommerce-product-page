@@ -91,25 +91,71 @@
         />
       </div>
     </header>
-    <!-- Collections
-  Men
-  Women
-  About
-  Contact
 
-  Sneaker Company
-
-  Fall Limited Edition Sneakers
-
-  These low-profile sneakers are your perfect casual wear companion. Featuring a 
-  durable rubber outer sole, they’ll withstand everything the weather can offer.
-
-  $125.00
-  50%
-  $250.00
-
-  0
-  Add to cart -->
+    <main class="main" aria-labelledby="product-name">
+      <div class="carousel-container">
+        <div class="main-product-image-container">
+          <img
+            class="main-product-image"
+            src="images/image-product-1.jpg"
+            alt="Product image 1"
+          />
+          <span id="previous-button" class="previous-button">
+            <img src="images/icon-previous.svg" alt="" />
+          </span>
+          <span id="next-button" class="next-button">
+            <img src="images/icon-next.svg" alt="" />
+          </span>
+        </div>
+      </div>
+      <div class="main-content">
+        <span class="brand-name">Sneaker Company</span>
+        <h1 id="product-name" class="product-name">
+          Fall Limited Edition Sneakers
+        </h1>
+        <p class="product-description">
+          These low-profile sneakers are your perfect casual wear companion.
+          Featuring a durable rubber outer sole, they’ll withstand everything
+          the weather can offer.
+        </p>
+        <div class="price-container">
+          <div class="current-price-container">
+            <h2 class="current-price">$125.00</h2>
+            <span class="discount">50%</span>
+          </div>
+          <div class="previous-price-container">
+            <h3 class="previous-price">$250.00</h3>
+          </div>
+        </div>
+        <div class="add-to-cart-container">
+          <div class="quantity-container">
+            <button id="minus-quantity-button" class="minus-quantity-button">
+              <img
+                class="minus-quantity-button-icon"
+                src="images/icon-minus.svg"
+                alt="Minus sign"
+              />
+            </button>
+            <span id="quantity" class="quantity">0</span>
+            <button id="plus-quantity-button" class="plus-quantity-button">
+              <img
+                class="plus-quantity-button-icon"
+                src="images/icon-plus.svg"
+                alt="Plus sign"
+              />
+            </button>
+          </div>
+          <button class="add-to-cart-button quantity-background">
+            <img
+              class="add-to-cart-button-icon"
+              src="images/icon-cart.svg"
+              alt="Cart"
+            />
+            <span class="add-to-cart-button-label">Add to cart</span>
+          </button>
+        </div>
+      </div>
+    </main>
     <script src="main.js"></script>
   </body>
 </html>

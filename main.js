@@ -7,24 +7,29 @@ const media = window.matchMedia("(width < 42em)");
 
 const openMenu = () => {
   openMenuButton.setAttribute("aria-expanded", "true");
-  navigationOverlay.classList.add("overlay-active");
 
   navigationContent.removeAttribute("style");
+  navigationOverlay.removeAttribute("style");
+
+  closeMenuButton.focus();
 };
 
 const closeMenu = () => {
   openMenuButton.setAttribute("aria-expanded", "false");
-  navigationOverlay.classList.remove("overlay-active");
 
   setTimeout(() => {
     navigationContent.style.transition = "none";
-  }, 5000);
+    navigationOverlay.style.transition = "none";
+  }, 350);
+
+  openMenuButton.focus();
 };
 
 const handleResize = (event) => {
   if (event.matches) {
     openMenuButton.setAttribute("aria-expanded", "false");
     navigationContent.style.transition = "none";
+    navigationOverlay.style.transition = "none";
   }
 };
 

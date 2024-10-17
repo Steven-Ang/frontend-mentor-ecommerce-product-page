@@ -37,13 +37,13 @@ li {
   justify-content: space-between;
   flex-direction: row;
   align-items: center;
-  padding: 1em;
+  padding: 2em;
 }
 
 .logo-container {
   display: flex;
   align-items: center;
-  gap: 1em;
+  gap: 2em;
 }
 
 .navigation {
@@ -51,19 +51,10 @@ li {
   align-items: center;
 }
 
-.navigation-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: black;
-  opacity: 0;
-  transition: translate 0.5s ease-in-out;
-}
-
 .navigation-content {
   display: flex;
   align-items: center;
   gap: 2em;
-  padding: 1em;
 }
 
 .navigation-links {
@@ -77,15 +68,37 @@ li {
   display: none;
 }
 
+.open-menu-button img {
+  width: 1.7em;
+}
+
 .navigation-links {
   display: flex;
   gap: 2em;
+}
+
+.user-container {
+  display: flex;
+  align-items: center;
+  gap: 2em;
+}
+
+.cart {
+  width: 1.7em;
+}
+
+.avatar {
+  width: 2em;
 }
 
 @media (width < 42em) {
   .open-menu-button,
   .close-menu-button {
     display: flex;
+  }
+
+  .logo-container, .user-container {
+    gap: 1em;
   }
 
   .navigation {
@@ -97,15 +110,26 @@ li {
   }
 
   .navigation-content {
-    display: flex;
     position: fixed;
     inset: 0 120px 0 0;
-    align-items: center;
-    gap: 2em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4em;
     background-color: white;
-    padding: 1em;
+    padding: 2em;
     translate: -100vw 0;
-    transition: translate 0.5s ease-in-out;
+    transition: translate 0.35s ease-in-out;
+  }
+
+  .navigation-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background-color: black;
+    opacity: 0;
+    transition: opacity 0.35s ease-in-out;
+    pointer-events: none;
   }
 
   .open-menu-button[aria-expanded="true"] + .navigation-content {
@@ -114,12 +138,6 @@ li {
 
   .top-header:has(.open-menu-button[aria-expanded="true"]) .navigation-overlay {
     opacity: 0.5;
-  }
-
-  .close-menu-button {
-    position: absolute;
-    top: 1em;
-    left: 1em;
   }
 
   .close-menu-button img {
@@ -131,23 +149,10 @@ li {
     flex-direction: column;
     font-weight: bold;
     gap: 2em;
+    font-size: 1.1em;
   }
 }
 
-.user-container {
-  display: flex;
-  align-items: center;
-  gap: 1em;
-}
-
-.cart {
-  width: 1.4em;
-}
-
-.avatar {
-  width: 2em;
-}
-
-.overlay-active {
-  display: block;
+.hidden {
+  display: none;
 }

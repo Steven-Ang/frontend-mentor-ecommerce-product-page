@@ -3,7 +3,7 @@ const closeMenuButton = document.getElementById("close-menu-button");
 const navigationOverlay = document.getElementById("navigation-overlay");
 const navigationContent = document.getElementById("navigation-content");
 
-const media = window.matchMedia("(width < 42em)");
+const media = window.matchMedia("(width < 52em)");
 
 const openMenu = () => {
   openMenuButton.setAttribute("aria-expanded", "true");

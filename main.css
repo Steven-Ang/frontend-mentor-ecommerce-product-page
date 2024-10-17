@@ -130,7 +130,7 @@ li {
   width: 2em;
 }
 
-@media (width < 42em) {
+@media (width < 52em) {
   .top-header {
     padding: 2em;
     margin: 0;

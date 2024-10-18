@@ -13,7 +13,9 @@
   --quantity-container-background-color: hsl(220, 14%, 75%, 0.1);
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -48,7 +50,7 @@ a {
   cursor: pointer;
 }
 
-li {
+ul {
   list-style: none;
 }
 
@@ -103,7 +105,7 @@ li {
   height: 0.25em;
   background-color: var(--primary-color-1);
   position: absolute;
-  bottom: -2.4375em;
+  bottom: -2.9375em;
   transition: background-color ease-in-out 0.2s;
 }
 
@@ -133,7 +135,7 @@ li {
 }
 
 .avatar {
-  width: 2em;
+  width: 3em;
 }
 
 @media (width < 52em) {
@@ -161,6 +163,17 @@ li {
     order: 2;
   }
 
+  .navigation-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background-color: var(--neutral-color-5);
+    opacity: 0;
+    transition: opacity 0.35s ease-in-out;
+    pointer-events: none;
+    z-index: 2;
+  }
+
   .navigation-content {
     position: fixed;
     inset: 0 7.5em 0 0;
@@ -172,16 +185,7 @@ li {
     padding: 2em;
     translate: -100vw 0;
     transition: translate 0.35s ease-in-out;
-  }
-
-  .navigation-overlay {
-    display: block;
-    position: fixed;
-    inset: 0;
-    background-color: var(--neutral-color-5);
-    opacity: 0;
-    transition: opacity 0.35s ease-in-out;
-    pointer-events: none;
+    z-index: 3;
   }
 
   .open-menu-button[aria-expanded="true"] + .navigation-content {
@@ -216,6 +220,10 @@ li {
   .navigation-link:is(:hover, :active, :focus)::after {
     bottom: -0.5em;
   }
+
+  .avatar {
+    width: 2em;
+  }
 }
 
 .main {
@@ -227,37 +235,57 @@ li {
   margin: 0 auto 6em auto;
 }
 
-.main-product-image-container {
-  position: relative;
-}
-
-.main-product-image {
-  border-radius: 1em;
-  width: 100%;
-  height: 100%;
+.product-images-container {
+  display: grid;
+  gap: 1em;
 }
 
 .previous-button,
 .next-button {
-  position: absolute;
+  display: none;
+}
+
+.carousel-image {
+  display: none;
+  border-radius: 1em;
+}
+
+.carousel-item[data-active] > .carousel-image {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 100%;
-  width: 4em;
-  height: 4em;
-  background-color: var(--white-color);
-  top: 50%;
-  transform: translateY(-50%);
+  width: 100%;
+  height: 100%;
   cursor: pointer;
 }
 
-.previous-button {
-  left: 1em;
+.product-thumbnail-images {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1em;
 }
 
-.next-button {
-  right: 1em;
+.product-thumbnail-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.product-thumbnail-image-button {
+  border-radius: 0.6em;
+  overflow: hidden;
+  border: 3px solid transparent;
+}
+
+.product-thumbnail-image-button[data-active],
+.product-thumbnail-image-button:is(:hover, :focus, :hover) {
+  border: 3px solid var(--primary-color-1);
+  outline: none;
+}
+
+.product-thumbnail-image-button[data-active] > .product-thumbnail-image,
+.product-thumbnail-image-button:is(:hover, :focus, :hover)
+  > .product-thumbnail-image {
+  opacity: 0.3;
 }
 
 .main-content {
@@ -355,8 +383,53 @@ li {
     gap: 2em;
   }
 
-  .main-product-image {
+  .product-thumbnail-images {
+    display: none;
+  }
+
+  .carousel {
+    position: relative;
+  }
+
+  .carousel-item {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
+
+  .carousel-item[data-active] {
+    position: static;
+    opacity: 1;
+  }
+
+  .carousel-image {
+    width: 100%;
+    height: 100%;
     border-radius: 0;
+  }
+
+  .previous-button,
+  .next-button {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    width: 4em;
+    height: 4em;
+    background-color: var(--white-color);
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 1;
+  }
+
+  .previous-button {
+    left: 1em;
+  }
+
+  .next-button {
+    right: 1em;
   }
 
   .main-content {

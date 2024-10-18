@@ -17,6 +17,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="main.css" />
+    <script src="main.js" defer></script>
   </head>
   <body>
     <header class="top-header">
@@ -93,19 +94,91 @@
     </header>
 
     <main class="main" aria-labelledby="product-name">
-      <div class="carousel-container">
-        <div class="main-product-image-container">
-          <img
-            class="main-product-image"
-            src="images/image-product-1.jpg"
-            alt="Product image 1"
-          />
-          <span id="previous-button" class="previous-button">
+      <div class="product-images-container">
+        <div class="carousel" data-carousel>
+          <button class="previous-button" data-carousel-button="previous">
             <img src="images/icon-previous.svg" alt="" />
-          </span>
-          <span id="next-button" class="next-button">
+          </button>
+          <button class="next-button" data-carousel-button="next">
             <img src="images/icon-next.svg" alt="" />
-          </span>
+          </button>
+          <ul class="carousel-list" data-slides>
+            <li class="carousel-item" data-active>
+              <img
+                class="carousel-image"
+                src="images/image-product-1.jpg"
+                alt="Product image #1"
+              />
+            </li>
+            <li class="carousel-item">
+              <img
+                class="carousel-image"
+                src="images/image-product-2.jpg"
+                alt="Product image #2"
+              />
+            </li>
+            <li class="carousel-item">
+              <img
+                class="carousel-image"
+                src="images/image-product-3.jpg"
+                alt="Product image #3"
+              />
+            </li>
+            <li class="carousel-item">
+              <img
+                class="carousel-image"
+                src="images/image-product-4.jpg"
+                alt="Product image #4"
+              />
+            </li>
+          </ul>
+        </div>
+        <div
+          class="product-thumbnail-images"
+          aria-label="Product images"
+          data-product-thumbnail-images
+        >
+          <button
+            class="product-thumbnail-image-button"
+            data-active
+            data-product-thumbnail-image-button
+          >
+            <img
+              class="product-thumbnail-image"
+              src="images/image-product-1-thumbnail.jpg"
+              alt="Product thumbnail image #1"
+            />
+          </button>
+          <button
+            class="product-thumbnail-image-button"
+            data-product-thumbnail-image-button
+          >
+            <img
+              class="product-thumbnail-image"
+              src="images/image-product-2-thumbnail.jpg"
+              alt="Product thumbnail image #2"
+            />
+          </button>
+          <button
+            class="product-thumbnail-image-button"
+            data-product-thumbnail-image-button
+          >
+            <img
+              class="product-thumbnail-image"
+              src="images/image-product-3-thumbnail.jpg"
+              alt="Product thumbnail image #3"
+            />
+          </button>
+          <button
+            class="product-thumbnail-image-button"
+            data-product-thumbnail-image-button
+          >
+            <img
+              class="product-thumbnail-image"
+              src="images/image-product-4-thumbnail.jpg"
+              alt="Product thumbnail image #4"
+            />
+          </button>
         </div>
       </div>
       <div class="main-content">
@@ -156,6 +229,5 @@
         </div>
       </div>
     </main>
-    <script src="main.js"></script>
   </body>
 </html>

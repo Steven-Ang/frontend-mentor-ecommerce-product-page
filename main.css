@@ -19,6 +19,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  outline-color: var(--primary-color-2);
 }
 
 html {
@@ -89,10 +90,6 @@ ul {
 
 .navigation-item {
   position: relative;
-}
-
-.navigation-link {
-  outline-color: transparent;
 }
 
 .navigation-link::after {
@@ -214,7 +211,6 @@ ul {
 
   .navigation-link {
     position: relative;
-    outline-color: transparent;
   }
 
   .navigation-link:is(:hover, :active, :focus)::after {
@@ -268,6 +264,7 @@ ul {
   height: 100%;
   object-fit: cover;
   cursor: pointer;
+  pointer-events: none;
 }
 
 .product-thumbnail-image-button {

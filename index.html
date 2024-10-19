@@ -96,35 +96,35 @@
     <main class="main" aria-labelledby="product-name">
       <div class="product-images-container">
         <div class="carousel" data-carousel>
-          <button class="previous-button" data-carousel-button="previous">
+          <button class="previous-button" data-carousel-button="previous" >
             <img src="images/icon-previous.svg" alt="" />
           </button>
           <button class="next-button" data-carousel-button="next">
             <img src="images/icon-next.svg" alt="" />
           </button>
           <ul class="carousel-list" data-slides>
-            <li class="carousel-item" data-active>
+            <li class="carousel-item" data-active data-product-image="1">
               <img
                 class="carousel-image"
                 src="images/image-product-1.jpg"
                 alt="Product image #1"
               />
             </li>
-            <li class="carousel-item">
+            <li class="carousel-item" data-product-image="2">
               <img
                 class="carousel-image"
                 src="images/image-product-2.jpg"
                 alt="Product image #2"
               />
             </li>
-            <li class="carousel-item">
+            <li class="carousel-item" data-product-image="3">
               <img
                 class="carousel-image"
                 src="images/image-product-3.jpg"
                 alt="Product image #3"
               />
             </li>
-            <li class="carousel-item">
+            <li class="carousel-item" data-product-image="4">
               <img
                 class="carousel-image"
                 src="images/image-product-4.jpg"
@@ -141,6 +141,7 @@
           <button
             class="product-thumbnail-image-button"
             data-active
+            data-product-image="1"
             data-product-thumbnail-image-button
           >
             <img
@@ -151,6 +152,7 @@
           </button>
           <button
             class="product-thumbnail-image-button"
+            data-product-image="2"
             data-product-thumbnail-image-button
           >
             <img
@@ -160,7 +162,9 @@
             />
           </button>
           <button
+          
             class="product-thumbnail-image-button"
+            data-product-image="3"
             data-product-thumbnail-image-button
           >
             <img
@@ -171,6 +175,7 @@
           </button>
           <button
             class="product-thumbnail-image-button"
+            data-product-image="4"
             data-product-thumbnail-image-button
           >
             <img

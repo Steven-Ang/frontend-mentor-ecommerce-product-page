@@ -35,32 +35,46 @@ const closeMenu = () => {
 };
 
 const handleCarouselButton = (event) => {
-  const offset = event.currentTarget.dataset.carouselButton === "next" ? 1 : -1;
+  const productThumbnailImages = document.querySelector(
+    "[data-product-thumbnail-images]"
+  );
+
+  const offset = event.target.dataset.carouselButton === "next" ? 1 : -1;
 
   const slides = event.target
     .closest("[data-carousel]")
     .querySelector("[data-slides]");
 
   const activeSlide = slides.querySelector("[data-active]");
+  const activeImage = productThumbnailImages.querySelector("[data-active]")
+
   let newIndex = [...slides.children].indexOf(activeSlide) + offset;
   if (newIndex < 0) newIndex = slides.children.length - 1;
   if (newIndex >= slides.children.length) newIndex = 0;
 
   slides.children[newIndex].dataset.active = true;
+  productThumbnailImages.children[newIndex].dataset.active = true;
   delete activeSlide.dataset.active;
+  delete activeImage.dataset.active;
 };
 
 const handleProductThumbnailImageButtonClick = (event) => {
-  const button = event.target.parentNode;
+  const button = event.target;
 
+  const carousel = document.querySelector("[data-slides]");
   const imagesList = button.closest("[data-product-thumbnail-images");
 
-  const activeElement = imagesList.querySelector("[data-active]");
+  const slide = carousel.querySelector(
+    `[data-product-image="${button.dataset.productImage}"]`
+  );
 
-  console.log(activeElement === button);
+  const activeSlide = carousel.querySelector("[data-active]");
+  const activeElement = imagesList.querySelector("[data-active]");
 
   if (activeElement !== button) {
     button.dataset.active = true;
+    slide.dataset.active = true;
+    delete activeSlide.dataset.active;
     delete activeElement.dataset.active;
   }
 };

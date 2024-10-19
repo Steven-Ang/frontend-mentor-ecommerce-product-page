@@ -56,7 +56,7 @@
               aria-label="Close"
             >
               <img
-                class="menu-button"
+                class="close-menu-button"
                 src="images/icon-close.svg"
                 aria-hidden="false"
               />
@@ -94,9 +94,30 @@
     </header>
 
     <main class="main" aria-labelledby="product-name">
+      <div class="lightbox">
+        <button class="previous-button" data-carousel-button="previous">
+          <img src="images/icon-previous.svg" alt="" />
+        </button>
+        <button class="next-button" data-carousel-button="next">
+          <img src="images/icon-next.svg" alt="" />
+        </button>
+        <button
+          id="close-lightbox-button"
+          class="close-lightbox-button"
+          aria-label="Close"
+        >
+          <img
+            class="close-lightbox-button"
+            src="images/icon-close.svg"
+            aria-hidden="false"
+          />
+        </button>
+        
+      </div>
+
       <div class="product-images-container">
         <div class="carousel" data-carousel>
-          <button class="previous-button" data-carousel-button="previous" >
+          <button class="previous-button" data-carousel-button="previous">
             <img src="images/icon-previous.svg" alt="" />
           </button>
           <button class="next-button" data-carousel-button="next">
@@ -162,7 +183,6 @@
             />
           </button>
           <button
-          
             class="product-thumbnail-image-button"
             data-product-image="3"
             data-product-thumbnail-image-button

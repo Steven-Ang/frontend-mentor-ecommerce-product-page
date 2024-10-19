@@ -4,6 +4,7 @@ const navigationOverlay = document.getElementById("navigation-overlay");
 const navigationContent = document.getElementById("navigation-content");
 
 const carouselButtons = document.querySelectorAll("[data-carousel-button]");
+const carouselItems = document.querySelectorAll(".carousel-item");
 const productThumbnailImageButtons = document.querySelectorAll(
   ".product-thumbnail-image-button"
 );
@@ -46,7 +47,7 @@ const handleCarouselButton = (event) => {
     .querySelector("[data-slides]");
 
   const activeSlide = slides.querySelector("[data-active]");
-  const activeImage = productThumbnailImages.querySelector("[data-active]")
+  const activeImage = productThumbnailImages.querySelector("[data-active]");
 
   let newIndex = [...slides.children].indexOf(activeSlide) + offset;
   if (newIndex < 0) newIndex = slides.children.length - 1;
@@ -79,6 +80,20 @@ const handleProductThumbnailImageButtonClick = (event) => {
   }
 };
 
+const handleLightbox = (event) => {
+  const isActive = Object.keys(event.target.dataset).find(
+    (key) => key === "active"
+  );
+  console.log(event.target, isActive);
+  if (isActive) {
+    const lightbox = document.querySelector(".lightbox");
+    lightbox.dataset.active = true;
+
+    const closeButton = lightbox.querySelector(".close-lightbox-button");
+    closeButton.addEventListener("click", () => delete lightbox.dataset.active);
+  }
+};
+
 const handleMinusButtonClick = (quantity) => {
   const quantityAmout = Number(quantity.textContent);
   if (quantityAmout > 0) quantity.textContent = quantityAmout - 1;
@@ -105,6 +120,10 @@ carouselButtons.forEach((carouselButton) =>
     handleCarouselButton(event)
   )
 );
+
+carouselItems.forEach((carouselItem) => {
+  carouselItem.addEventListener("click", (event) => handleLightbox(event));
+});
 
 productThumbnailImageButtons.forEach((productThumbnailImageButton) => {
   productThumbnailImageButton.addEventListener("click", (event) =>

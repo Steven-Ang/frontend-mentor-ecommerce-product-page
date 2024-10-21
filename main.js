@@ -178,6 +178,7 @@ const handleResize = (event) => {
     openMenuButton.setAttribute("aria-expanded", "false");
     navigationContent.style.transition = "none";
     navigationOverlay.style.transition = "none";
+    delete lightbox.dataset.active;
   }
 };
 

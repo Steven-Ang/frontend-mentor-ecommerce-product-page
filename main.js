@@ -3,6 +3,9 @@ const closeMenuButton = document.getElementById("close-menu-button");
 const navigationOverlay = document.getElementById("navigation-overlay");
 const navigationContent = document.getElementById("navigation-content");
 
+const lightbox = document.querySelector("[data-lightbox]");
+const productImages = document.querySelector("[data-product-images]");
+
 const carouselButtons = document.querySelectorAll("[data-carousel-button]");
 const carouselItems = document.querySelectorAll(".carousel-item");
 const productThumbnailImageButtons = document.querySelectorAll(
@@ -36,47 +39,113 @@ const closeMenu = () => {
 };
 
 const handleCarouselButton = (event) => {
-  const productThumbnailImages = document.querySelector(
-    "[data-product-thumbnail-images]"
-  );
+  const isLightbox =
+    event.target.parentNode.parentNode.parentNode.dataset.lightbox;
 
   const offset = event.target.dataset.carouselButton === "next" ? 1 : -1;
 
-  const slides = event.target
-    .closest("[data-carousel]")
-    .querySelector("[data-slides]");
+  const lightBoxThumbnaillImages = lightbox.querySelector(
+    "[data-product-thumbnail-images]"
+  );
+  const productThumbnailImages = productImages.querySelector(
+    "[data-product-thumbnail-images]"
+  );
 
-  const activeSlide = slides.querySelector("[data-active]");
-  const activeImage = productThumbnailImages.querySelector("[data-active]");
+  const lightboxSlides = lightbox.querySelector("[data-slides]");
+  const productImagesSlides = productImages.querySelector("[data-slides]");
 
-  let newIndex = [...slides.children].indexOf(activeSlide) + offset;
-  if (newIndex < 0) newIndex = slides.children.length - 1;
-  if (newIndex >= slides.children.length) newIndex = 0;
+  const filteredSlides = [...lightboxSlides.children].filter(
+    (slide) => slide.nodeName === "LI"
+  );
 
-  slides.children[newIndex].dataset.active = true;
+  const activeLightboxSlide = lightboxSlides.querySelector("[data-active]");
+  const activeProductImagesSlide = productImages.querySelector("[data-active]");
+
+  const lightboxActiveProductThumbnailImage =
+    lightBoxThumbnaillImages.querySelector("[data-active]");
+  const productImagesActiveProductThumbnailImage =
+    productThumbnailImages.querySelector("[data-active]");
+
+  let newIndex = null;
+
+  if (isLightbox) {
+    newIndex = filteredSlides.indexOf(activeLightboxSlide) + offset;
+    if (newIndex < 0) newIndex = filteredSlides.length - 1;
+    if (newIndex >= filteredSlides.length) newIndex = 0;
+  } else {
+    newIndex =
+      [...productImagesSlides.children].indexOf(activeProductImagesSlide) +
+      offset;
+    if (newIndex < 0) newIndex = productImagesSlides.children.length - 1;
+    if (newIndex >= productImagesSlides.children.length) newIndex = 0;
+  }
+
+  filteredSlides[newIndex].dataset.active = true;
+  lightBoxThumbnaillImages.children[newIndex].dataset.active = true;
+
+  productImagesSlides.children[newIndex].dataset.active = true;
   productThumbnailImages.children[newIndex].dataset.active = true;
-  delete activeSlide.dataset.active;
-  delete activeImage.dataset.active;
+
+  delete activeLightboxSlide.dataset.active;
+  delete lightboxActiveProductThumbnailImage.dataset.active;
+
+  delete activeProductImagesSlide.dataset.active;
+  delete productImagesActiveProductThumbnailImage.dataset.active;
 };
 
 const handleProductThumbnailImageButtonClick = (event) => {
+  const isLightbox =
+    event.target.parentNode.parentNode.parentNode.dataset.lightbox;
+
   const button = event.target;
 
-  const carousel = document.querySelector("[data-slides]");
-  const imagesList = button.closest("[data-product-thumbnail-images");
-
-  const slide = carousel.querySelector(
+  const lightboxSlide = lightbox.querySelector(
+    `[data-product-image="${button.dataset.productImage}"]`
+  );
+  const productImageSlide = productImages.querySelector(
     `[data-product-image="${button.dataset.productImage}"]`
   );
 
-  const activeSlide = carousel.querySelector("[data-active]");
-  const activeElement = imagesList.querySelector("[data-active]");
+  const lightBoxThumbnaillImages = lightbox.querySelector(
+    "[data-product-thumbnail-images]"
+  );
+  const productThumbnailImages = productImages.querySelector(
+    "[data-product-thumbnail-images]"
+  );
 
-  if (activeElement !== button) {
+  const lightBoxThumbnaillImage = lightBoxThumbnaillImages.querySelector(
+    `[data-product-image="${button.dataset.productImage}"]`
+  );
+  const productThumbnailImage = productThumbnailImages.querySelector(
+    `[data-product-image="${button.dataset.productImage}"]`
+  );
+
+  const lightboxActiveProductThumbnailImage =
+    lightBoxThumbnaillImages.querySelector("[data-active]");
+  const productImagesActiveProductThumbnailImage =
+    productThumbnailImages.querySelector("[data-active]");
+
+  const lightboxSlides = lightbox.querySelector("[data-slides]");
+  const productImagesSlides = productImages.querySelector("[data-slides]");
+
+  const activeLightboxSlide = lightboxSlides.querySelector("[data-active]");
+  const activeProductImagesSlide =
+    productImagesSlides.querySelector("[data-active]");
+
+  if (
+    (isLightbox && button !== lightboxActiveProductThumbnailImage) ||
+    (!isLightbox && button !== productImagesActiveProductThumbnailImage)
+  ) {
     button.dataset.active = true;
-    slide.dataset.active = true;
-    delete activeSlide.dataset.active;
-    delete activeElement.dataset.active;
+    lightboxSlide.dataset.active = true;
+    productImageSlide.dataset.active = true;
+    lightBoxThumbnaillImage.dataset.active = true;
+    productThumbnailImage.dataset.active = true;
+
+    delete activeLightboxSlide.dataset.active;
+    delete activeProductImagesSlide.dataset.active;
+    delete lightboxActiveProductThumbnailImage.dataset.active;
+    delete productImagesActiveProductThumbnailImage.dataset.active;
   }
 };
 

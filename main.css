@@ -234,20 +234,95 @@ ul {
 .lightbox {
   position: fixed;
   inset: 0;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.75);
   opacity: 0;
   z-index: -1;
   display: grid;
   place-items: center;
 }
 
+button[data-carousel-button] > img {
+  pointer-events: none;
+}
+
 .lightbox[data-active] {
-  opacity: 0.5;
+  opacity: 1;
   z-index: 1;
 }
 
-.close-lightbox-button {
-  margin-left: auto;
+.lightbox > .carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.lightbox > .carousel-item {
+  position: relative;
+}
+
+.lightbox > .carousel-item {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.lightbox > .carousel-item[data-active] {
+  position: static;
+  opacity: 1;
+  z-index: 2;
+}
+
+.lightbox > .carousel-item[data-active] .carousel-image {
+  opacity: 1;
+}
+
+.lightbox > .carousel .close-lightbox-button-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 50%;
+}
+
+.lightbox > .carousel .carousel-list {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+}
+
+.lightbox > .carousel-item .carousel-image {
+  width: 100%;
+}
+
+.lightbox > .carousel .product-thumbnail-images {
+  width: 40%;
+}
+
+.lightbox .previous-button,
+.lightbox .next-button {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  width: 4em;
+  height: 4em;
+  background-color: var(--white-color);
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 1;
+}
+
+.lightbox .previous-button {
+  left: -2em;
+}
+
+.lightbox .next-button {
+  right: -2em;
 }
 
 .product-images-container {
@@ -255,8 +330,8 @@ ul {
   gap: 1em;
 }
 
-.previous-button,
-.next-button {
+.product-images-container .previous-button,
+.product-images-container .next-button {
   display: none;
 }
 
@@ -427,7 +502,6 @@ ul {
   .carousel-item[data-active] {
     position: static;
     opacity: 1;
-    transition-delay: 0s;
     z-index: 2;
   }
 
@@ -442,8 +516,8 @@ ul {
     opacity: 1;
   }
 
-  .previous-button,
-  .next-button {
+  .product-images-container .previous-button,
+  .product-images-container .next-button {
     position: absolute;
     display: flex;
     justify-content: center;

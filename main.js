@@ -3,6 +3,10 @@ const closeMenuButton = document.getElementById("close-menu-button");
 const navigationOverlay = document.getElementById("navigation-overlay");
 const navigationContent = document.getElementById("navigation-content");
 
+const cart = document.getElementById("cart-button");
+
+const mainContent = document.querySelector(".main-content");
+
 const lightbox = document.querySelector("[data-lightbox]");
 const productImages = document.querySelector("[data-product-images]");
 
@@ -15,6 +19,7 @@ const productThumbnailImageButtons = document.querySelectorAll(
 const minusQuantityButton = document.getElementById("minus-quantity-button");
 const plusQuantityButton = document.getElementById("plus-quantity-button");
 const quantity = document.getElementById("quantity");
+const addToCartButton = document.getElementById("add-to-cart-button");
 
 const media = window.matchMedia("(width < 52em)");
 
@@ -36,6 +41,14 @@ const closeMenu = () => {
   }, 350);
 
   openMenuButton.focus();
+};
+
+const handleCart = (event) => {
+  if (cart.dataset.active) {
+    delete cart.dataset.active;
+  } else {
+    cart.dataset.active = true;
+  }
 };
 
 const handleCarouselButton = (event) => {
@@ -153,7 +166,6 @@ const handleLightbox = (event) => {
   const isActive = Object.keys(event.target.dataset).find(
     (key) => key === "active"
   );
-  console.log(event.target, isActive);
   if (isActive) {
     const lightbox = document.querySelector(".lightbox");
     lightbox.dataset.active = true;
@@ -173,6 +185,51 @@ const handlePlusButtonClick = (quantity) => {
   quantity.textContent = quantityAmout + 1;
 };
 
+const handleAddToCart = (event) => {
+  const quantityAmount = quantity.textContent;
+  if (parseInt(quantityAmount) === 0) return;
+
+  const cartItems = cart.querySelector(".cart-items");
+
+  const cartItem = document.createElement("li");
+  cartItem.classList.add("cart-item");
+
+  if (cartItems.classList.contains("empty")) {
+    cartItems.classList.remove("empty");
+    cartItems.textContent = "";
+  }
+
+  const productThumbnailImage = productImages
+    .querySelector(".product-thumbnail-image-button")
+    .querySelector(".product-thumbnail-image").src;
+  const productName = mainContent
+    .querySelector(".product-name")
+    .textContent.trim();
+  const currentPrice = mainContent
+    .querySelector(".current-price")
+    .textContent.trim();
+  const totalPrice = parseFloat(
+    parseFloat(currentPrice.split("$").join("")).toFixed(2) *
+      parseInt(quantityAmount)
+  ).toFixed(2);
+
+  cartItem.innerHTML = `
+    <img class="cart-item-image" src="${productThumbnailImage}" />
+    <div class="cart-item-labels">
+      <p class="cart-item-name">${productName}</p>
+      <p class="cart-item-price">
+        ${currentPrice} x ${quantityAmount} <span class="cart-item-total-price">$${totalPrice}</span>
+      </p>
+    </div>
+    <button class="trash-icon-button">
+      <img class="trash-icon" src="images/icon-delete.svg" />
+    </button>
+  `;
+
+  cartItems.appendChild(cartItem);
+  quantity.textContent = "0";
+};
+
 const handleResize = (event) => {
   if (event.matches) {
     openMenuButton.setAttribute("aria-expanded", "false");
@@ -184,6 +241,8 @@ const handleResize = (event) => {
 
 openMenuButton.addEventListener("click", openMenu);
 closeMenuButton.addEventListener("click", closeMenu);
+
+cart.addEventListener("click", handleCart);
 
 carouselButtons.forEach((carouselButton) =>
   carouselButton.addEventListener("click", (event) =>
@@ -207,5 +266,6 @@ minusQuantityButton.addEventListener("click", () =>
 plusQuantityButton.addEventListener("click", () =>
   handlePlusButtonClick(quantity)
 );
+addToCartButton.addEventListener("click", (event) => handleAddToCart(event));
 
 media.addEventListener("change", handleResize);

@@ -127,12 +127,96 @@ ul {
   gap: 2em;
 }
 
-.cart {
+.cart-button {
+  position: relative;
+}
+
+.cart-icon {
   width: 1.7em;
+}
+
+.cart {
+  position: absolute;
+  opacity: 0;
+  width: 20em;
+  background-color: var(--white-color);
+  top: 3em;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: -1;
+  box-shadow: 2px 15px 23px 13px rgba(0, 0, 0, 0.1);
+  border-radius: 0.4em;
+}
+
+.cart-button[data-active] > .cart {
+  opacity: 1;
+  z-index: 1;
+}
+
+.cart-heading {
+  font-size: 1.2em;
+  border-bottom: 2px solid var(--neutral-color-3);
+  text-align: left;
+  padding: 1em;
+}
+
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  gap: 1em;
+}
+
+.cart-items.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 10em;
+}
+
+.empty-cart-label {
+  color: var(--neutral-color-2);
+  font-weight: bold;
+  text-align: center;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+.cart-item > .cart-item-image {
+  width: 4em;
+  border-radius: 0.4em;
+}
+
+.cart-item > .cart-item-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  text-align: left;
+}
+
+.cart-item > .cart-item-labels .cart-item-total-price {
+  font-weight: bold;
+}
+
+.cart-item > .trash-icon {
+  width: 2em;
 }
 
 .avatar {
   width: 3em;
+}
+
+@media (width < 52em) {
+  .cart {
+    position: fixed;
+    top: 8em;
+    width: 90vw;
+  }
 }
 
 @media (width < 52em) {

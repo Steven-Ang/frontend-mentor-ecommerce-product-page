@@ -83,7 +83,21 @@
       </div>
 
       <div class="user-container">
-        <img id="cart" class="cart" src="images/icon-cart.svg" alt="Cart" />
+        <button id="cart-button" class="cart-button">
+          <img
+            id="cart"
+            class="cart-icon"
+            src="images/icon-cart.svg"
+            alt="Cart"
+          />
+
+          <section class="cart">
+            <h2 class="cart-heading">Cart</h2>
+            <ul class="cart-items empty">
+              <li class="empty-cart-label">Your cart is empty</li>
+            </ul>
+          </section>
+        </button>
         <img
           id="avatar"
           class="avatar"
@@ -329,7 +343,7 @@
               />
             </button>
           </div>
-          <button class="add-to-cart-button quantity-background">
+          <button id="add-to-cart-button" class="add-to-cart-button quantity-background">
             <img
               class="add-to-cart-button-icon"
               src="images/icon-cart.svg"

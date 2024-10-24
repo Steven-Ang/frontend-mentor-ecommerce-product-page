@@ -151,6 +151,20 @@ ul {
   border-radius: 0.4em;
 }
 
+.cart-badge {
+  position: absolute;
+  border-radius: 0.6em;
+  width: 1em;
+  background-color: var(--primary-color-1);
+  color: var(--white-color);
+  font-size: 0.8em;
+  font-size: 0.8em;
+  top: -0.4em;
+  left: 0.9em;
+  right: 0;
+  width: 1.6em;
+}
+
 .cart-button[data-active] > .cart {
   opacity: 1;
   z-index: 1;
@@ -176,7 +190,6 @@ ul {
   flex-direction: column;
   height: 10em;
 }
-
 
 .cart-items {
   display: flex;

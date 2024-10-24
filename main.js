@@ -1,9 +1,12 @@
+const body = document.querySelector("body");
+
 const openMenuButton = document.getElementById("open-menu-button");
 const closeMenuButton = document.getElementById("close-menu-button");
 const navigationOverlay = document.getElementById("navigation-overlay");
 const navigationContent = document.getElementById("navigation-content");
 
 const cart = document.getElementById("cart-button");
+const cartBadge = document.querySelector(".cart-badge");
 
 const mainContent = document.querySelector(".main-content");
 
@@ -191,13 +194,26 @@ const handlePlusButtonClick = (quantity) => {
   quantity.textContent = quantityAmout + 1;
 };
 
-const handleTrashButtonOnClick = ({ cartContent, cartItems, cartItem }) => {
+const handleTrashButtonOnClick = ({
+  cartContent,
+  cartItems,
+  cartItem,
+  cartBadge,
+}) => {
   if (cartItems.children.length === 1) {
     cartContent.classList.add("empty");
     cartContent.innerHTML = `
         <p class="empty-cart-label">Your cart is empty</p>
       `;
+    cartBadge.textContent = "";
   } else {
+    const cartItemQuantity = cartItem.querySelector(
+      ".cart-item-quantity"
+    ).textContent;
+
+    cartBadge.textContent =
+      parseInt(cartBadge.textContent) - parseInt(cartItemQuantity);
+
     cartItems.removeChild(cartItem);
   }
 };
@@ -249,6 +265,9 @@ const handleAddToCart = () => {
             parseInt(cartItemQuantity.textContent)
         ).toFixed(2);
 
+        cartBadge.textContent =
+          parseInt(cartBadge.textContent) + parseInt(quantityAmount);
+
         quantity.textContent = "0";
       }
     });
@@ -292,11 +311,18 @@ const handleAddToCart = () => {
   `;
 
   trashButton.addEventListener("click", () =>
-    handleTrashButtonOnClick({ cartContent, cartItems, cartItem })
+    handleTrashButtonOnClick({ cartContent, cartItems, cartItem, cartBadge })
   );
 
   cartItem.appendChild(trashButton);
   cartItems.appendChild(cartItem);
+
+  if (cartItems.children.length > 1) {
+    cartBadge.textContent =
+      parseInt(cartBadge.textContent) + parseInt(quantityAmount);
+  } else {
+    cartBadge.textContent = quantityAmount;
+  }
   quantity.textContent = "0";
 };
 
@@ -337,5 +363,9 @@ plusQuantityButton.addEventListener("click", () =>
   handlePlusButtonClick(quantity)
 );
 addToCartButton.addEventListener("click", () => handleAddToCart());
+
+window.addEventListener("scroll", () => {
+  if (cart.dataset.active) delete cart.dataset.active;
+});
 
 media.addEventListener("change", handleResize);

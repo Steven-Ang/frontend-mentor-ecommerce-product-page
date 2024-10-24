@@ -29,6 +29,8 @@ html {
 body {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 6em;
   font-family: "Kumbh Sans", Arial, Helvetica, sans-serif;
   min-height: 100%;
@@ -60,6 +62,7 @@ ul {
   justify-content: space-between;
   flex-direction: row;
   align-items: center;
+  width: 85%;
   padding: 2em 0;
   margin: 0 4em;
   border-bottom: 0.125em solid lightgray;
@@ -160,19 +163,25 @@ ul {
   padding: 1em;
 }
 
-.cart-items {
+.cart-content {
   display: flex;
   flex-direction: column;
-  padding: 1em;
   gap: 1em;
+  padding: 1em;
 }
 
-.cart-items.empty {
-  display: flex;
+.cart-content.empty {
   align-items: center;
   justify-content: center;
   flex-direction: column;
   height: 10em;
+}
+
+
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
 }
 
 .empty-cart-label {
@@ -207,8 +216,20 @@ ul {
   width: 2em;
 }
 
+.checkout-button {
+  background-color: var(--primary-color-1);
+  border-radius: 0.6em;
+  padding: 1em;
+  font-weight: bold;
+}
+
+.checkout-button:is(:hover, :active, :focus),
+.add-to-cart-button:is(:hover, :active, :focus) {
+  background-color: var(--primary-color-2);
+}
+
 .avatar {
-  width: 3em;
+  width: 2.4em;
 }
 
 @media (width < 52em) {
@@ -221,8 +242,8 @@ ul {
 
 @media (width < 52em) {
   .top-header {
+    width: 100%;
     padding: 2em;
-    margin: 0;
     border: none;
   }
 
@@ -482,6 +503,8 @@ button[data-carousel-button] > img {
 
 .brand-name {
   font-weight: bold;
+  letter-spacing: 0.2ch;
+  text-transform: uppercase;
 }
 
 .price-container {

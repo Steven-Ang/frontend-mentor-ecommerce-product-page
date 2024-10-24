@@ -44,6 +44,12 @@ const closeMenu = () => {
 };
 
 const handleCart = (event) => {
+  if (
+    !event.target.classList.contains("cart-button") &&
+    !event.target.classList.contains("cart-icon")
+  )
+    return;
+
   if (cart.dataset.active) {
     delete cart.dataset.active;
   } else {
@@ -185,14 +191,70 @@ const handlePlusButtonClick = (quantity) => {
   quantity.textContent = quantityAmout + 1;
 };
 
-const handleAddToCart = (event) => {
+const handleTrashButtonOnClick = ({ cartContent, cartItems, cartItem }) => {
+  if (cartItems.children.length === 1) {
+    cartContent.classList.add("empty");
+    cartContent.innerHTML = `
+        <p class="empty-cart-label">Your cart is empty</p>
+      `;
+  } else {
+    cartItems.removeChild(cartItem);
+  }
+};
+
+const handleAddToCart = () => {
   const quantityAmount = quantity.textContent;
   if (parseInt(quantityAmount) === 0) return;
 
-  const cartItems = cart.querySelector(".cart-items");
+  const cartContent = cart.querySelector(".cart-content");
+  const productId = mainContent.dataset.productId;
 
+  if (cartContent.classList.contains("empty")) {
+    cartContent.classList.remove("empty");
+    cartContent.innerHTML = "";
+
+    const cartItems = document.createElement("ul");
+    cartItems.classList.add("cart-items");
+
+    const checkoutButton = document.createElement("button");
+    checkoutButton.classList.add("checkout-button");
+    checkoutButton.textContent = "Checkout";
+
+    cartContent.appendChild(cartItems);
+    cartContent.appendChild(checkoutButton);
+  }
+
+  const cartItems = cartContent.querySelector(".cart-items");
   const cartItem = document.createElement("li");
   cartItem.classList.add("cart-item");
+  cartItem.dataset.productId = productId;
+
+  if (cartItems.children.length >= 1) {
+    const cartItemsList = [...cartItems.children];
+    cartItemsList.forEach((cartItem) => {
+      if (cartItem.dataset.productId === productId) {
+        const cartItemPrice = cartItem.querySelector(
+          ".cart-item-current-price"
+        ).textContent;
+        const cartItemQuantity = cartItem.querySelector(".cart-item-quantity");
+        const cartItemTotalPrice = cartItem.querySelector(
+          ".cart-item-total-price"
+        );
+
+        cartItemQuantity.textContent =
+          parseInt(cartItemQuantity.textContent) + parseInt(quantityAmount);
+
+        cartItemTotalPrice.textContent = parseFloat(
+          parseFloat(cartItemPrice).toFixed(2) *
+            parseInt(cartItemQuantity.textContent)
+        ).toFixed(2);
+
+        quantity.textContent = "0";
+      }
+    });
+
+    return;
+  }
 
   if (cartItems.classList.contains("empty")) {
     cartItems.classList.remove("empty");
@@ -207,10 +269,10 @@ const handleAddToCart = (event) => {
     .textContent.trim();
   const currentPrice = mainContent
     .querySelector(".current-price")
-    .textContent.trim();
+    .textContent.trim()
+    .split("$")[1];
   const totalPrice = parseFloat(
-    parseFloat(currentPrice.split("$").join("")).toFixed(2) *
-      parseInt(quantityAmount)
+    parseFloat(currentPrice).toFixed(2) * parseInt(quantityAmount)
   ).toFixed(2);
 
   cartItem.innerHTML = `
@@ -218,14 +280,22 @@ const handleAddToCart = (event) => {
     <div class="cart-item-labels">
       <p class="cart-item-name">${productName}</p>
       <p class="cart-item-price">
-        ${currentPrice} x ${quantityAmount} <span class="cart-item-total-price">$${totalPrice}</span>
+        $<span class="cart-item-current-price">${currentPrice}</span> x <span class="cart-item-quantity">${quantityAmount}</span> $<span class="cart-item-total-price">${totalPrice}</span>
       </p>
     </div>
-    <button class="trash-icon-button">
-      <img class="trash-icon" src="images/icon-delete.svg" />
-    </button>
   `;
 
+  const trashButton = document.createElement("button");
+  trashButton.classList.add("trash-icon-button");
+  trashButton.innerHTML = `
+    <img class="trash-icon" src="images/icon-delete.svg" />
+  `;
+
+  trashButton.addEventListener("click", () =>
+    handleTrashButtonOnClick({ cartContent, cartItems, cartItem })
+  );
+
+  cartItem.appendChild(trashButton);
   cartItems.appendChild(cartItem);
   quantity.textContent = "0";
 };
@@ -266,6 +336,6 @@ minusQuantityButton.addEventListener("click", () =>
 plusQuantityButton.addEventListener("click", () =>
   handlePlusButtonClick(quantity)
 );
-addToCartButton.addEventListener("click", (event) => handleAddToCart(event));
+addToCartButton.addEventListener("click", () => handleAddToCart());
 
 media.addEventListener("change", handleResize);

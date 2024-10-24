@@ -93,9 +93,9 @@
 
           <section class="cart">
             <h2 class="cart-heading">Cart</h2>
-            <ul class="cart-items empty">
-              <li class="empty-cart-label">Your cart is empty</li>
-            </ul>
+            <div class="cart-content empty">
+              <p class="empty-cart-label">Your cart is empty</p>
+            </div>
           </section>
         </button>
         <img
@@ -306,7 +306,7 @@
           </button>
         </div>
       </div>
-      <div class="main-content">
+      <div class="main-content" data-product-id="1">
         <span class="brand-name">Sneaker Company</span>
         <h1 id="product-name" class="product-name">
           Fall Limited Edition Sneakers
@@ -343,7 +343,10 @@
               />
             </button>
           </div>
-          <button id="add-to-cart-button" class="add-to-cart-button quantity-background">
+          <button
+            id="add-to-cart-button"
+            class="add-to-cart-button quantity-background"
+          >
             <img
               class="add-to-cart-button-icon"
               src="images/icon-cart.svg"

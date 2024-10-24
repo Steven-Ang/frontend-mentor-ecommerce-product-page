@@ -241,8 +241,15 @@ ul {
   background-color: var(--primary-color-2);
 }
 
+.profile-button:is(:hover, :active, :focus) > .avatar {
+  border-radius: 100%;
+  border: 2px solid var(--primary-color-1);
+  transition: border 0.2s ease-out;
+}
+
 .avatar {
-  width: 2.4em;
+  width: 3em;
+  border: 2px solid transparent;
 }
 
 @media (width < 52em) {

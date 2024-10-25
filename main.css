@@ -460,6 +460,19 @@ button[data-carousel-button] > img {
   right: -2em;
 }
 
+.close-lightbox-icon {
+  width: 1em;
+  height: 1em;
+}
+
+.close-lightbox-icon path {
+  fill: var(--white-color);
+}
+
+.close-lightbox-button:is(:hover, :active, :focus) > .close-lightbox-icon path {
+  fill: var(--primary-color-1);
+}
+
 .product-images-container {
   display: grid;
   gap: 1em;
@@ -612,6 +625,11 @@ button[data-carousel-button] > img {
   padding: 1.4em;
 }
 
+.minus-quantity-button:is(:hover, :active, :focus) > .minus-quantity-button-icon path,
+.plus-quantity-button:is(:hover, :active, :focus) > .plus-quantity-button-icon path {
+  fill: var(--primary-color-2);
+}
+
 .quantity {
   display: flex;
   align-items: center;
@@ -634,6 +652,10 @@ button[data-carousel-button] > img {
 
 .add-to-cart-button-label {
   display: block;
+}
+
+.add-to-cart-button-icon path {
+  fill: var(--neutral-color-1);
 }
 
 @media (width < 52em) {

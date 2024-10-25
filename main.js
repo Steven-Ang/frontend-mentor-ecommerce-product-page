@@ -61,8 +61,7 @@ const handleCart = (event) => {
 };
 
 const handleCarouselButton = (event) => {
-  const isLightbox =
-    event.target.parentNode.parentNode.parentNode.dataset.lightbox;
+  const isLightbox = event.target.closest(".lightbox")?.dataset?.lightbox;
 
   const offset = event.target.dataset.carouselButton === "next" ? 1 : -1;
 
@@ -103,10 +102,14 @@ const handleCarouselButton = (event) => {
   }
 
   filteredSlides[newIndex].dataset.active = true;
-  lightBoxThumbnaillImages.children[newIndex].dataset.active = true;
+  lightBoxThumbnaillImages.children[
+    newIndex
+  ].firstElementChild.dataset.active = true;
 
   productImagesSlides.children[newIndex].dataset.active = true;
-  productThumbnailImages.children[newIndex].dataset.active = true;
+  productThumbnailImages.children[
+    newIndex
+  ].firstElementChild.dataset.active = true;
 
   delete activeLightboxSlide.dataset.active;
   delete lightboxActiveProductThumbnailImage.dataset.active;
@@ -116,8 +119,7 @@ const handleCarouselButton = (event) => {
 };
 
 const handleProductThumbnailImageButtonClick = (event) => {
-  const isLightbox =
-    event.target.parentNode.parentNode.parentNode.dataset.lightbox;
+  const isLightbox = event.target.closest(".lightbox")?.dataset?.lightbox;
 
   const button = event.target;
 

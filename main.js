@@ -1,13 +1,18 @@
 const body = document.querySelector("body");
 
+const topHeader = document.querySelector(".top-header");
+
 const openMenuButton = document.getElementById("open-menu-button");
 const closeMenuButton = document.getElementById("close-menu-button");
 const navigationOverlay = document.getElementById("navigation-overlay");
 const navigationContent = document.getElementById("navigation-content");
 
+const userContainer = document.querySelector(".user-container");
+
 const cart = document.getElementById("cart-button");
 const cartBadge = document.querySelector(".cart-badge");
 
+const mainContainer = document.querySelector(".main");
 const mainContent = document.querySelector(".main-content");
 
 const lightbox = document.querySelector("[data-lightbox]");
@@ -26,22 +31,46 @@ const addToCartButton = document.getElementById("add-to-cart-button");
 
 const media = window.matchMedia("(width < 52em)");
 
+const bodyScrollLock = bodyScrollLockUpgrade;
+
 const openMenu = () => {
   openMenuButton.setAttribute("aria-expanded", "true");
+  openMenuButton.setAttribute("aria-hidden", "true");
+
+  closeMenuButton.setAttribute("aria-hidden", "false");
 
   navigationContent.removeAttribute("style");
+  navigationContent.removeAttribute("inert");
+
   navigationOverlay.removeAttribute("style");
 
+  userContainer.setAttribute("inert", "");
+  mainContainer.setAttribute("inert", "");
+
+  bodyScrollLock.disableBodyScroll(body);
+
+  closeMenuButton.removeAttribute("inert");
   closeMenuButton.focus();
 };
 
 const closeMenu = () => {
   openMenuButton.setAttribute("aria-expanded", "false");
+  openMenuButton.setAttribute("aria-hidden", "false");
+
+  closeMenuButton.setAttribute("aria-hidden", "true");
+  closeMenuButton.setAttribute("inert", "");
 
   setTimeout(() => {
     navigationContent.style.transition = "none";
     navigationOverlay.style.transition = "none";
   }, 350);
+
+  navigationContent.setAttribute("inert", "");
+
+  userContainer.removeAttribute("inert");
+  mainContainer.removeAttribute("inert");
+
+  bodyScrollLock.enableBodyScroll(body);
 
   openMenuButton.focus();
 };
@@ -179,10 +208,28 @@ const handleLightbox = (event) => {
   );
   if (isActive) {
     const lightbox = document.querySelector(".lightbox");
+    lightbox.setAttribute("aria-hidden", "false");
+    lightbox.removeAttribute("inert");
     lightbox.dataset.active = true;
 
+    topHeader.setAttribute("inert", "");
+    mainContainer.setAttribute("inert", "");
+
+    bodyScrollLock.disableBodyScroll(body);
+
     const closeButton = lightbox.querySelector(".close-lightbox-button");
-    closeButton.addEventListener("click", () => delete lightbox.dataset.active);
+    closeButton.addEventListener("click", () => {
+      lightbox.setAttribute("aria-hidden", "true");
+      lightbox.setAttribute("inert", "");
+      delete lightbox.dataset.active;
+
+      topHeader.removeAttribute("inert");
+      mainContainer.removeAttribute("inert");
+
+      bodyScrollLock.enableBodyScroll(body);
+
+      closeButton.focus();
+    });
   }
 };
 
@@ -331,9 +378,20 @@ const handleAddToCart = () => {
 const handleResize = (event) => {
   if (event.matches) {
     openMenuButton.setAttribute("aria-expanded", "false");
+    navigationContent.setAttribute("inert", "");
     navigationContent.style.transition = "none";
     navigationOverlay.style.transition = "none";
+
+    lightbox.setAttribute("inert", "");
+    lightbox.setAttribute("aria-hidden", "true");
     delete lightbox.dataset.active;
+  } else {
+    topHeader.removeAttribute("inert");
+    navigationContent.removeAttribute("inert");
+    openMenuButton.setAttribute("aria-expanded", "false");
+    closeMenuButton.setAttribute("inert", "");
+    closeMenuButton.setAttribute("aria-hidden", "true");
+    mainContainer.removeAttribute("inert");
   }
 };
 
@@ -368,6 +426,14 @@ addToCartButton.addEventListener("click", () => handleAddToCart());
 
 window.addEventListener("scroll", () => {
   if (cart.dataset.active) delete cart.dataset.active;
+});
+
+window.addEventListener("load", (event) => {
+  if (media.matches) {
+    navigationContent.setAttribute("inert", "");
+  } else {
+    navigationContent.removeAttribute("inert");
+  }
 });
 
 media.addEventListener("change", handleResize);

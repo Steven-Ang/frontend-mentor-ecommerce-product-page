@@ -172,7 +172,7 @@ ul {
 
 .cart-heading {
   font-size: 1.2em;
-  border-bottom: 2px solid var(--neutral-color-3);
+  border-bottom: 1px solid var(--neutral-color-3);
   text-align: left;
   padding: 1em;
 }

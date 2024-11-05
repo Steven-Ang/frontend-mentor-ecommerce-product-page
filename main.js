@@ -44,6 +44,8 @@ const isActiveElement = (dataset) => {
   return isActive;
 };
 
+const isLightbox = (target) => target.closest(".lightbox")?.dataset?.lightbox;
+
 const convertToPrice = (price) => parseFloat(price).toFixed(2);
 
 const openMenu = ({ elements }) => {
@@ -132,8 +134,6 @@ const changeActiveProductImage = ({ currentActiveImage, newActiveImage }) => {
 const handleCarouselButton = ({ event, elements }) => {
   const { lightbox, productImages } = elements;
 
-  const isLightbox = event.target.closest(".lightbox")?.dataset?.lightbox;
-
   const offset = event.target.dataset.carouselButton === "next" ? 1 : -1;
 
   const lightBoxThumbnaillImages = lightbox.querySelector(
@@ -159,10 +159,10 @@ const handleCarouselButton = ({ event, elements }) => {
     productThumbnailImages.querySelector("[data-active]");
 
   let newIndex = null;
-  const imagesSlides = isLightbox
+  const imagesSlides = isLightbox(event.target)
     ? filteredLightboxSlides
     : [...productImagesSlides.children];
-  const activeSlide = isLightbox
+  const activeSlide = isLightbox(event.target)
     ? activeLightboxSlide
     : activeProductImagesSlide;
 
@@ -192,8 +192,6 @@ const handleCarouselButton = ({ event, elements }) => {
 
 const handleProductThumbnailImageButtonClick = ({ event, elements }) => {
   const { lightbox, productImages } = elements;
-
-  const isLightbox = event.target.closest(".lightbox")?.dataset?.lightbox;
 
   const button = event.target;
 
@@ -231,8 +229,10 @@ const handleProductThumbnailImageButtonClick = ({ event, elements }) => {
     productImagesSlides.querySelector("[data-active]");
 
   const isDifferentImage =
-    (isLightbox && button !== lightboxActiveProductThumbnailImage) ||
-    (!isLightbox && button !== productImagesActiveProductThumbnailImage);
+    (isLightbox(event.target) &&
+      button !== lightboxActiveProductThumbnailImage) ||
+    (!isLightbox(event.target) &&
+      button !== productImagesActiveProductThumbnailImage);
 
   if (isDifferentImage) {
     changeActiveProductImage({
@@ -283,7 +283,7 @@ const handleLightbox = ({ event, elements }) => {
   const isActive = isActiveElement(event.target.dataset);
   if (!isActive) return;
 
-  toggleLightbox({ event, lightbox });
+  if (!isLightbox(event.target)) toggleLightbox({ event, lightbox });
 
   topHeader.setAttribute("inert", "");
   mainContainer.setAttribute("inert", "");

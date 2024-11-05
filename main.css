@@ -11,6 +11,7 @@
   --white-color: var(--neutral-color-4);
   --overlay-color: var(--neutral-color-5);
   --quantity-container-background-color: hsl(220, 14%, 75%, 0.1);
+  --primary-color-1-active: hsl(26, 100%, 74%);
 }
 
 *,
@@ -19,7 +20,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  outline-color: var(--primary-color-2);
+  outline-color: var(--primary-color-1-active);
 }
 
 html {
@@ -105,7 +106,7 @@ ul {
   height: 0.25em;
   background-color: var(--primary-color-1);
   position: absolute;
-  bottom: -44px;
+  bottom: -2.75em;
   transition: background-color ease-in-out 0.2s;
 }
 
@@ -147,7 +148,7 @@ ul {
   left: 50%;
   transform: translateX(-50%);
   z-index: -1;
-  box-shadow: 2px 15px 23px 13px rgba(0, 0, 0, 0.1);
+  box-shadow: 0.125em 0.9375em 1.4375em 0.8125em rgba(0, 0, 0, 0.1);
   border-radius: 0.4em;
 }
 
@@ -172,7 +173,7 @@ ul {
 
 .cart-heading {
   font-size: 1.2em;
-  border-bottom: 1px solid var(--neutral-color-3);
+  border-bottom: 0.0625em solid var(--neutral-color-3);
   text-align: left;
   padding: 1em;
 }
@@ -238,18 +239,18 @@ ul {
 
 .checkout-button:is(:hover, :active, :focus),
 .add-to-cart-button:is(:hover, :active, :focus) {
-  background-color: var(--primary-color-2);
+  background-color: var(--primary-color-1-active);
 }
 
 .profile-button:is(:hover, :active, :focus) > .avatar {
   border-radius: 100%;
-  border: 2px solid var(--primary-color-1);
+  border: 0.125em solid var(--primary-color-1);
   transition: border 0.2s ease-out;
 }
 
 .avatar {
   width: 3em;
-  border: 2px solid transparent;
+  border: 0.125em solid transparent;
 }
 
 @media (width < 52em) {
@@ -367,12 +368,12 @@ ul {
 }
 
 .border-wrapper {
-  border: 3px solid transparent;
+  border: 0.1875em solid transparent;
   overflow: hidden;
 }
 
 .border-wrapper:has(.product-thumbnail-image-button[data-active]) {
-  border: 3px solid var(--primary-color-1);
+  border: 0.1875em solid var(--primary-color-1);
   border-radius: 0.6em;
 }
 
@@ -545,7 +546,7 @@ button[data-carousel-button] > img {
 .border-wrapper:has(
     .product-thumbnail-image-button:is(:hover, :focus, :active)
   ) {
-  border: 3px solid var(--primary-color-1);
+  border: 0.1875em solid var(--primary-color-1);
   transition: border 0.25s ease-out;
   outline: none;
   border-radius: 0.6em;
@@ -625,9 +626,13 @@ button[data-carousel-button] > img {
   padding: 1.4em;
 }
 
-.minus-quantity-button:is(:hover, :active, :focus) > .minus-quantity-button-icon path,
-.plus-quantity-button:is(:hover, :active, :focus) > .plus-quantity-button-icon path {
-  fill: var(--primary-color-2);
+.minus-quantity-button:is(:hover, :active, :focus)
+  > .minus-quantity-button-icon
+  path,
+.plus-quantity-button:is(:hover, :active, :focus)
+  > .plus-quantity-button-icon
+  path {
+  fill: var(--primary-color-1-active);
 }
 
 .quantity {

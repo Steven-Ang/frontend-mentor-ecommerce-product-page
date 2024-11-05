@@ -9,6 +9,7 @@ const userContainer = document.querySelector(".user-container");
 
 const cart = document.getElementById("cart-button");
 const cartBadge = document.querySelector(".cart-badge");
+const cartIcon = document.querySelector(".cart-icon");
 
 const mainContainer = document.querySelector(".main");
 const mainContent = document.querySelector(".main-content");
@@ -120,7 +121,8 @@ const disableCart = ({ cart }) => {
 const handleCart = ({ event, cart }) => {
   const isOutside =
     !event.target.classList.contains("cart-button") &&
-    !event.target.classList.contains("cart-icon");
+    !event.target.classList.contains("cart-icon") &&
+    !event.target.classList.contains("cart-icon-path");
   if (isOutside) return;
 
   toggleCart({ cart });
@@ -428,7 +430,9 @@ const createCheckButton = () => {
   return checkoutButton;
 };
 
-const handleAddToCart = () => {
+const handleAddToCart = ({ elements }) => {
+  const { cart, cartIcon, mainContent, productImages, quantity } = elements;
+
   const quantityAmount = quantity.textContent;
   if (parseInt(quantityAmount) === 0) return;
 
@@ -583,7 +587,11 @@ minusQuantityButton.addEventListener("click", () =>
 plusQuantityButton.addEventListener("click", () =>
   handlePlusButtonClick(quantity)
 );
-addToCartButton.addEventListener("click", () => handleAddToCart());
+addToCartButton.addEventListener("click", () =>
+  handleAddToCart({
+    elements: { cart, cartIcon, mainContent, productImages, quantity },
+  })
+);
 
 window.addEventListener("scroll", () => handleWindowOnScroll({ cart }));
 window.addEventListener("load", handleWindowOnLoad);

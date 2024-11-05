@@ -109,23 +109,31 @@ const closeMenu = ({ elements }) => {
   openMenuButton.focus();
 };
 
-const toggleCart = ({ cart }) => {
-  if (cart.dataset.active) delete cart.dataset.active;
-  else cart.dataset.active = true;
+const toggleCart = ({ cart, cartIcon }) => {
+  if (cart.dataset.active) {
+    delete cart.dataset.active;
+    updateCartIcon({ mode: "inactive", cartIcon });
+  } else {
+    cart.dataset.active = true;
+    updateCartIcon({ mode: "active", cartIcon });
+  }
 };
 
-const disableCart = ({ cart }) => {
-  if (cart.dataset.active) delete cart.dataset.active;
+const disableCart = ({ cart, cartIcon }) => {
+  if (cart.dataset.active) {
+    delete cart.dataset.active;
+    updateCartIcon({ mode: "inactive", cartIcon });
+  }
 };
 
-const handleCart = ({ event, cart }) => {
+const handleCart = ({ event, cart, cartIcon }) => {
   const isOutside =
     !event.target.classList.contains("cart-button") &&
     !event.target.classList.contains("cart-icon") &&
     !event.target.classList.contains("cart-icon-path");
   if (isOutside) return;
 
-  toggleCart({ cart });
+  toggleCart({ cart, cartIcon });
 };
 
 const changeActiveProductImage = ({ currentActiveImage, newActiveImage }) => {
@@ -297,6 +305,11 @@ const updateProductQuantity = ({ quantity, quantityAmount }) => {
   quantity.textContent = quantityAmount;
 };
 
+const updateCartIcon = ({ mode, cartIcon }) => {
+  if (mode === "active") cartIcon.dataset.active = true;
+  if (mode === "inactive") delete cartIcon.dataset.active;
+};
+
 const handleMinusButtonClick = (quantity) => {
   const quantityAmount = Number(quantity.textContent);
   if (quantityAmount > 0)
@@ -308,7 +321,7 @@ const handlePlusButtonClick = (quantity) => {
   updateProductQuantity({ quantity, quantityAmount: quantityAmount + 1 });
 };
 
-const updateCartBadge = ({ mode, cartBadge, quantity }) => {
+const updateCartBadge = ({ mode, cartBadge, cartIcon, quantity }) => {
   if (mode === "plus")
     cartBadge.textContent =
       parseInt(cartBadge.textContent) + parseInt(quantity);
@@ -316,18 +329,28 @@ const updateCartBadge = ({ mode, cartBadge, quantity }) => {
     cartBadge.textContent =
       parseInt(cartBadge.textContent) - parseInt(quantity);
   if (mode === "replace") cartBadge.textContent = quantity;
+
+  if (parseInt(cartBadge.textContent) >= 1)
+    updateCartIcon({ mode: "active", cartIcon });
 };
 
-const clearCart = ({ cartContent, cartBadge }) => {
+const clearCart = ({ cartContent, cartIcon, cartBadge }) => {
   cartContent.classList.add("empty");
   cartContent.innerHTML = `
         <p class="empty-cart-label">Your cart is empty</p>
       `;
   cartBadge.textContent = "";
+  updateCartIcon({ mode: "inactive", cartIcon });
 };
 
-const removeCartItem = ({ cartItems, cartItem, cartBadge, quantity }) => {
-  updateCartBadge({ mode: "plus", cartBadge, quantity });
+const removeCartItem = ({
+  cartItems,
+  cartItem,
+  cartBadge,
+  cartIcon,
+  quantity,
+}) => {
+  updateCartBadge({ mode: "plus", cartBadge, cartIcon, quantity });
   cartItems.removeChild(cartItem);
 };
 
@@ -336,9 +359,10 @@ const handleTrashButtonOnClick = ({
   cartItems,
   cartItem,
   cartBadge,
+  cartIcon,
 }) => {
   if (cartItems.children.length === 1) {
-    clearCart({ cartContent, cartBadge });
+    clearCart({ cartContent, cartBadge, cartIcon });
     return;
   }
 
@@ -349,6 +373,7 @@ const handleTrashButtonOnClick = ({
     cartItems,
     cartItem,
     cartBadge,
+    cartIcon,
     quantity: cartItemQuantity,
   });
 };
@@ -384,7 +409,7 @@ const createCartItem = ({
   return cartItem;
 };
 
-const updateCartItem = ({ cartItem, quantity, quantityAmount }) => {
+const updateCartItem = ({ cartItem, cartIcon, quantity, quantityAmount }) => {
   const cartItemPrice = cartItem.querySelector(
     ".cart-item-current-price"
   ).textContent;
@@ -398,7 +423,12 @@ const updateCartItem = ({ cartItem, quantity, quantityAmount }) => {
     convertToPrice(cartItemPrice) * parseInt(cartItemQuantity.textContent)
   );
 
-  updateCartBadge({ mode: "plus", cartBadge, quantity: quantityAmount });
+  updateCartBadge({
+    mode: "plus",
+    cartBadge,
+    cartIcon,
+    quantity: quantityAmount,
+  });
 
   updateProductQuantity({ quantity, quantityAmount: "0" });
 };
@@ -408,6 +438,7 @@ const createTrashIcon = ({
   cartItems,
   cartItem,
   cartBadge,
+  cartIcon,
   handleTrashButtonOnClick,
 }) => {
   const trashButton = document.createElement("button");
@@ -417,7 +448,13 @@ const createTrashIcon = ({
   `;
 
   trashButton.addEventListener("click", () =>
-    handleTrashButtonOnClick({ cartContent, cartItems, cartItem, cartBadge })
+    handleTrashButtonOnClick({
+      cartContent,
+      cartItems,
+      cartItem,
+      cartBadge,
+      cartIcon,
+    })
   );
 
   return trashButton;
@@ -458,7 +495,7 @@ const handleAddToCart = ({ elements }) => {
     const cartItemsList = [...cartItems.children];
     cartItemsList.forEach((cartItem) => {
       if (cartItem.dataset.productId === productId)
-        updateCartItem({ cartItem, quantity, quantityAmount });
+        updateCartItem({ cartItem, cartIcon, quantity, quantityAmount });
     });
     return;
   }
@@ -488,6 +525,7 @@ const handleAddToCart = ({ elements }) => {
     cartItems,
     cartItem,
     cartBadge,
+    cartIcon,
     handleTrashButtonOnClick,
   });
 
@@ -495,9 +533,19 @@ const handleAddToCart = ({ elements }) => {
   cartItems.appendChild(cartItem);
 
   if (cartItems.children.length > 1)
-    updateCartBadge({ mode: "plus", cartBadge, quantity: quantityAmount });
+    updateCartBadge({
+      mode: "plus",
+      cartBadge,
+      cartIcon,
+      quantity: quantityAmount,
+    });
   else
-    updateCartBadge({ mode: "replace", cartBadge, quantity: quantityAmount });
+    updateCartBadge({
+      mode: "replace",
+      cartBadge,
+      cartIcon,
+      quantity: quantityAmount,
+    });
 
   updateProductQuantity({ quantity, quantityAmount: "0" });
 };
@@ -522,7 +570,8 @@ const handleResize = (event) => {
   }
 };
 
-const handleWindowOnScroll = ({ cart }) => disableCart({ cart });
+const handleWindowOnScroll = ({ cart, cartIcon }) =>
+  disableCart({ cart, cartIcon });
 
 const handleWindowOnLoad = () => {
   if (media.matches) navigationContent.setAttribute("inert", "");
@@ -554,7 +603,9 @@ closeMenuButton.addEventListener("click", () =>
   })
 );
 
-cart.addEventListener("click", (event) => handleCart({ event, cart }));
+cart.addEventListener("click", (event) =>
+  handleCart({ event, cart, cartIcon })
+);
 
 carouselButtons.forEach((carouselButton) =>
   carouselButton.addEventListener("click", (event) =>
@@ -593,7 +644,9 @@ addToCartButton.addEventListener("click", () =>
   })
 );
 
-window.addEventListener("scroll", () => handleWindowOnScroll({ cart }));
+window.addEventListener("scroll", () =>
+  handleWindowOnScroll({ cart, cartIcon })
+);
 window.addEventListener("load", handleWindowOnLoad);
 
 media.addEventListener("change", handleResize);

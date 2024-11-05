@@ -152,7 +152,7 @@ ul {
   }
 }
 
-.cart-icon.active .cart-icon-path {
+.cart-icon[data-active=true] .cart-icon-path {
   fill: var(--neutral-color-1);
 }
 

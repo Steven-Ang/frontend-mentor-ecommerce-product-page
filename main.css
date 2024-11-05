@@ -139,6 +139,7 @@ ul {
 
 .cart-button {
   position: relative;
+  display: flex;
 }
 
 .cart-icon:is(:hover, :active, :focus) .cart-icon-path {

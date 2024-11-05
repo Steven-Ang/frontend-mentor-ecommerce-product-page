@@ -110,6 +110,12 @@ ul {
   transition: background-color ease-in-out 0.2s;
 }
 
+@media (prefers-reduced-motion) {
+  .navigation-link:is(:hover, :active, :focus)::after {
+    transition: none;
+  }
+}
+
 .open-menu-button,
 .close-menu-button,
 .navigation-overlay {
@@ -135,8 +141,19 @@ ul {
   position: relative;
 }
 
-.cart-icon {
-  width: 1.7em;
+.cart-icon:is(:hover, :active, :focus) .cart-icon-path {
+  fill: var(--neutral-color-1);
+  transition: fill 0.2s ease-in;
+}
+
+@media (prefers-reduced-motion) {
+  .cart-icon:is(:hover, :active, :focus) .cart-icon-path {
+    transition: none;
+  }
+}
+
+.cart-icon.active .cart-icon-path {
+  fill: var(--neutral-color-1);
 }
 
 .cart {
@@ -248,6 +265,12 @@ ul {
   transition: border 0.2s ease-out;
 }
 
+@media (prefers-reduced-motion) {
+  .profile-button:is(:hover, :active, :focus) > .avatar {
+    transition: none;
+  }
+}
+
 .avatar {
   width: 3em;
   border: 0.125em solid transparent;
@@ -309,6 +332,13 @@ ul {
     translate: -100vw 0;
     transition: translate 0.35s ease-in-out;
     z-index: 3;
+  }
+
+  @media (prefers-reduced-motion) {
+    .navigation-overlay,
+    .navigation-content {
+      transition: none;
+    }
   }
 
   .open-menu-button[aria-expanded="true"] + .navigation-content {
@@ -377,8 +407,19 @@ ul {
   border-radius: 0.6em;
 }
 
-button[data-carousel-button] > img {
+button[data-carousel-button] > svg {
   pointer-events: none;
+}
+
+button[data-carousel-button]:is(:hover, :active, :focus) > svg path {
+  stroke: var(--primary-color-1);
+  transition: stroke 0.2s ease-in;
+}
+
+@media (prefers-reduced-motion) {
+  button[data-carousel-button]:is(:hover, :active, :focus) > svg path {
+    transition: none;
+  }
 }
 
 .lightbox[data-active] {
@@ -468,10 +509,26 @@ button[data-carousel-button] > img {
 
 .close-lightbox-icon path {
   fill: var(--white-color);
+  transition: fill 0.2s ease-in;
+}
+
+@media (prefers-reduced-motion) {
+  .close-lightbox-icon path {
+    transition: none;
+  }
 }
 
 .close-lightbox-button:is(:hover, :active, :focus) > .close-lightbox-icon path {
   fill: var(--primary-color-1);
+  transition: fill 0.2s ease-in;
+}
+
+@media (prefers-reduced-motion) {
+  .close-lightbox-button:is(:hover, :active, :focus)
+    > .close-lightbox-icon
+    path {
+    transition: none;
+  }
 }
 
 .product-images-container {
@@ -536,8 +593,15 @@ button[data-carousel-button] > img {
 
 .product-thumbnail-image-button[data-active],
 .product-thumbnail-image-button:is(:hover, :focus, :hover) {
-  transition: border 0.25s ease-out;
+  transition: border 0.2s ease-out;
   outline: none;
+}
+
+@media (prefers-reduced-motion) {
+  .product-thumbnail-image-button[data-active],
+  .product-thumbnail-image-button:is(:hover, :focus, :hover) {
+    transition: none;
+  }
 }
 
 .border-wrapper:has(
@@ -547,11 +611,22 @@ button[data-carousel-button] > img {
     .product-thumbnail-image-button:is(:hover, :focus, :active)
   ) {
   border: 0.1875em solid var(--primary-color-1);
-  transition: border 0.25s ease-out;
   outline: none;
   border-radius: 0.6em;
   background-color: white;
-  transition: background-color 0.25s ease-out;
+  transition: border 0.2s ease-out;
+  transition: background-color 0.22s ease-out;
+}
+
+@media (prefers-reduced-motion) {
+  .border-wrapper:has(
+      .product-thumbnail-image-button[data-active]:is(:hover, :focus, :active)
+    ),
+  .border-wrapper:has(
+      .product-thumbnail-image-button:is(:hover, :focus, :active)
+    ) {
+    transition: none;
+  }
 }
 
 .product-thumbnail-image-button:is(:hover, :focus, :active) {
@@ -562,7 +637,14 @@ button[data-carousel-button] > img {
 .product-thumbnail-image-button:is(:hover, :focus, :hover)
   > .product-thumbnail-image {
   opacity: 0.3;
-  transition: opacity 0.25s ease-out;
+  transition: opacity 0.2s ease-out;
+}
+
+@media (prefers-reduced-motion) {
+  .product-thumbnail-image-button[data-active] > .product-thumbnail-image,
+  .product-thumbnail-image-button:is(:hover, :focus, :hover) {
+    transition: none;
+  }
 }
 
 .main-content {
@@ -633,6 +715,18 @@ button[data-carousel-button] > img {
   > .plus-quantity-button-icon
   path {
   fill: var(--primary-color-1-active);
+  transition: fill 0.2s ease-in;
+}
+
+@media (prefers-reduced-motion) {
+  .minus-quantity-button:is(:hover, :active, :focus)
+    > .minus-quantity-button-icon
+    path,
+  .plus-quantity-button:is(:hover, :active, :focus)
+    > .plus-quantity-button-icon
+    path {
+    transition: none;
+  }
 }
 
 .quantity {
@@ -653,6 +747,13 @@ button[data-carousel-button] > img {
   color: var(--neutral-color-1);
   border-radius: 0.6em;
   flex: 1;
+  transition: background-color 0.2s ease-in;
+}
+
+@media (prefers-reduced-motion) {
+  .add-to-cart-buttonq {
+    transition: none;
+  }
 }
 
 .add-to-cart-button-label {
@@ -661,6 +762,13 @@ button[data-carousel-button] > img {
 
 .add-to-cart-button-icon path {
   fill: var(--neutral-color-1);
+  transition: fill 0.2s ease-in;
+}
+
+@media (prefers-reduced-motion) {
+  .add-to-cart-button path {
+    transition: none;
+  }
 }
 
 @media (width < 52em) {
@@ -761,6 +869,7 @@ button[data-carousel-button] > img {
 
   .add-to-cart-button {
     padding: 1.2em 0;
+    box-shadow: 2px 20px 53px -15px var(--primary-color-1);
   }
 }
 

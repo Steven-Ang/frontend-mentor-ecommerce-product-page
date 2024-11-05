@@ -1,5 +1,3 @@
-const body = document.querySelector("body");
-
 const topHeader = document.querySelector(".top-header");
 
 const openMenuButton = document.getElementById("open-menu-button");
@@ -18,6 +16,8 @@ const mainContent = document.querySelector(".main-content");
 const lightbox = document.querySelector("[data-lightbox]");
 const productImages = document.querySelector("[data-product-images]");
 
+const closeLightboxButton = lightbox.querySelector(".close-lightbox-button");
+
 const carouselButtons = document.querySelectorAll("[data-carousel-button]");
 const carouselItems = document.querySelectorAll(".carousel-item");
 const productThumbnailImageButtons = document.querySelectorAll(
@@ -31,9 +31,31 @@ const addToCartButton = document.getElementById("add-to-cart-button");
 
 const media = window.matchMedia("(width < 52em)");
 
-const bodyScrollLock = bodyScrollLockUpgrade;
+const updateBodyScroll = (mode) => {
+  const body = document.querySelector("body");
+  const bodyScrollLock = bodyScrollLockUpgrade;
 
-const openMenu = () => {
+  if (mode === "enable") bodyScrollLock.enableBodyScroll(body);
+  if (mode === "disable") bodyScrollLock.disableBodyScroll(body);
+};
+
+const isActiveElement = (dataset) => {
+  const isActive = Object.keys(dataset).find((key) => key === "active");
+  return isActive;
+};
+
+const convertToPrice = (price) => parseFloat(price).toFixed(2);
+
+const openMenu = ({ elements }) => {
+  const {
+    openMenuButton,
+    closeMenuButton,
+    navigationContent,
+    navigationOverlay,
+    userContainer,
+    mainContainer,
+  } = elements;
+
   openMenuButton.setAttribute("aria-expanded", "true");
   openMenuButton.setAttribute("aria-hidden", "true");
 
@@ -47,13 +69,22 @@ const openMenu = () => {
   userContainer.setAttribute("inert", "");
   mainContainer.setAttribute("inert", "");
 
-  bodyScrollLock.disableBodyScroll(body);
+  updateBodyScroll("disable");
 
   closeMenuButton.removeAttribute("inert");
   closeMenuButton.focus();
 };
 
-const closeMenu = () => {
+const closeMenu = ({ elements }) => {
+  const {
+    openMenuButton,
+    closeMenuButton,
+    navigationContent,
+    navigationOverlay,
+    userContainer,
+    mainContainer,
+  } = elements;
+
   openMenuButton.setAttribute("aria-expanded", "false");
   openMenuButton.setAttribute("aria-hidden", "false");
 
@@ -70,26 +101,37 @@ const closeMenu = () => {
   userContainer.removeAttribute("inert");
   mainContainer.removeAttribute("inert");
 
-  bodyScrollLock.enableBodyScroll(body);
+  updateBodyScroll("enable");
 
   openMenuButton.focus();
 };
 
-const handleCart = (event) => {
-  if (
-    !event.target.classList.contains("cart-button") &&
-    !event.target.classList.contains("cart-icon")
-  )
-    return;
-
-  if (cart.dataset.active) {
-    delete cart.dataset.active;
-  } else {
-    cart.dataset.active = true;
-  }
+const toggleCart = ({ cart }) => {
+  if (cart.dataset.active) delete cart.dataset.active;
+  else cart.dataset.active = true;
 };
 
-const handleCarouselButton = (event) => {
+const disableCart = ({ cart }) => {
+  if (cart.dataset.active) delete cart.dataset.active;
+};
+
+const handleCart = ({ event, cart }) => {
+  const isOutside =
+    !event.target.classList.contains("cart-button") &&
+    !event.target.classList.contains("cart-icon");
+  if (isOutside) return;
+
+  toggleCart({ cart });
+};
+
+const changeActiveProductImage = ({ currentActiveImage, newActiveImage }) => {
+  delete currentActiveImage.dataset.active;
+  newActiveImage.dataset.active = true;
+};
+
+const handleCarouselButton = ({ event, elements }) => {
+  const { lightbox, productImages } = elements;
+
   const isLightbox = event.target.closest(".lightbox")?.dataset?.lightbox;
 
   const offset = event.target.dataset.carouselButton === "next" ? 1 : -1;
@@ -104,7 +146,7 @@ const handleCarouselButton = (event) => {
   const lightboxSlides = lightbox.querySelector("[data-slides]");
   const productImagesSlides = productImages.querySelector("[data-slides]");
 
-  const filteredSlides = [...lightboxSlides.children].filter(
+  const filteredLightboxSlides = [...lightboxSlides.children].filter(
     (slide) => slide.nodeName === "LI"
   );
 
@@ -117,37 +159,40 @@ const handleCarouselButton = (event) => {
     productThumbnailImages.querySelector("[data-active]");
 
   let newIndex = null;
+  const imagesSlides = isLightbox
+    ? filteredLightboxSlides
+    : [...productImagesSlides.children];
+  const activeSlide = isLightbox
+    ? activeLightboxSlide
+    : activeProductImagesSlide;
 
-  if (isLightbox) {
-    newIndex = filteredSlides.indexOf(activeLightboxSlide) + offset;
-    if (newIndex < 0) newIndex = filteredSlides.length - 1;
-    if (newIndex >= filteredSlides.length) newIndex = 0;
-  } else {
-    newIndex =
-      [...productImagesSlides.children].indexOf(activeProductImagesSlide) +
-      offset;
-    if (newIndex < 0) newIndex = productImagesSlides.children.length - 1;
-    if (newIndex >= productImagesSlides.children.length) newIndex = 0;
-  }
+  newIndex = imagesSlides.indexOf(activeSlide) + offset;
+  if (newIndex < 0) newIndex = imagesSlides.length - 1;
+  if (newIndex >= imagesSlides.length) newIndex = 0;
 
-  filteredSlides[newIndex].dataset.active = true;
-  lightBoxThumbnaillImages.children[
-    newIndex
-  ].firstElementChild.dataset.active = true;
+  changeActiveProductImage({
+    currentActiveImage: activeLightboxSlide,
+    newActiveImage: filteredLightboxSlides[newIndex],
+  });
+  changeActiveProductImage({
+    currentActiveImage: activeProductImagesSlide,
+    newActiveImage: productImagesSlides.children[newIndex],
+  });
 
-  productImagesSlides.children[newIndex].dataset.active = true;
-  productThumbnailImages.children[
-    newIndex
-  ].firstElementChild.dataset.active = true;
-
-  delete activeLightboxSlide.dataset.active;
-  delete lightboxActiveProductThumbnailImage.dataset.active;
-
-  delete activeProductImagesSlide.dataset.active;
-  delete productImagesActiveProductThumbnailImage.dataset.active;
+  changeActiveProductImage({
+    currentActiveImage: lightboxActiveProductThumbnailImage,
+    newActiveImage:
+      lightBoxThumbnaillImages.children[newIndex].firstElementChild,
+  });
+  changeActiveProductImage({
+    currentActiveImage: productImagesActiveProductThumbnailImage,
+    newActiveImage: productThumbnailImages.children[newIndex].firstElementChild,
+  });
 };
 
-const handleProductThumbnailImageButtonClick = (event) => {
+const handleProductThumbnailImageButtonClick = ({ event, elements }) => {
+  const { lightbox, productImages } = elements;
+
   const isLightbox = event.target.closest(".lightbox")?.dataset?.lightbox;
 
   const button = event.target;
@@ -185,62 +230,103 @@ const handleProductThumbnailImageButtonClick = (event) => {
   const activeProductImagesSlide =
     productImagesSlides.querySelector("[data-active]");
 
-  if (
+  const isDifferentImage =
     (isLightbox && button !== lightboxActiveProductThumbnailImage) ||
-    (!isLightbox && button !== productImagesActiveProductThumbnailImage)
-  ) {
-    button.dataset.active = true;
-    lightboxSlide.dataset.active = true;
-    productImageSlide.dataset.active = true;
-    lightBoxThumbnaillImage.dataset.active = true;
-    productThumbnailImage.dataset.active = true;
+    (!isLightbox && button !== productImagesActiveProductThumbnailImage);
 
-    delete activeLightboxSlide.dataset.active;
-    delete activeProductImagesSlide.dataset.active;
-    delete lightboxActiveProductThumbnailImage.dataset.active;
-    delete productImagesActiveProductThumbnailImage.dataset.active;
-  }
-};
-
-const handleLightbox = (event) => {
-  const isActive = Object.keys(event.target.dataset).find(
-    (key) => key === "active"
-  );
-  if (isActive) {
-    const lightbox = document.querySelector(".lightbox");
-    lightbox.setAttribute("aria-hidden", "false");
-    lightbox.removeAttribute("inert");
-    lightbox.dataset.active = true;
-
-    topHeader.setAttribute("inert", "");
-    mainContainer.setAttribute("inert", "");
-
-    bodyScrollLock.disableBodyScroll(body);
-
-    const closeButton = lightbox.querySelector(".close-lightbox-button");
-    closeButton.addEventListener("click", () => {
-      lightbox.setAttribute("aria-hidden", "true");
-      lightbox.setAttribute("inert", "");
-      delete lightbox.dataset.active;
-
-      topHeader.removeAttribute("inert");
-      mainContainer.removeAttribute("inert");
-
-      bodyScrollLock.enableBodyScroll(body);
-
-      closeButton.focus();
+  if (isDifferentImage) {
+    changeActiveProductImage({
+      currentActiveImage: activeLightboxSlide,
+      newActiveImage: lightboxSlide,
+    });
+    changeActiveProductImage({
+      currentActiveImage: activeProductImagesSlide,
+      newActiveImage: productImageSlide,
+    });
+    changeActiveProductImage({
+      currentActiveImage: lightboxActiveProductThumbnailImage,
+      newActiveImage: lightBoxThumbnaillImage,
+    });
+    changeActiveProductImage({
+      currentActiveImage: productImagesActiveProductThumbnailImage,
+      newActiveImage: productThumbnailImage,
     });
   }
 };
 
+const toggleLightbox = ({ lightbox }) => {
+  if (lightbox.dataset.active) {
+    lightbox.setAttribute("aria-hidden", "true");
+    lightbox.setAttribute("inert", "");
+    delete lightbox.dataset.active;
+  } else {
+    lightbox.setAttribute("aria-hidden", "false");
+    lightbox.removeAttribute("inert");
+    lightbox.dataset.active = true;
+  }
+};
+
+const handleLightboxCloseButtonClick = ({ event, lightbox }) => {
+  toggleLightbox({ event, lightbox });
+
+  topHeader.removeAttribute("inert");
+  mainContainer.removeAttribute("inert");
+
+  updateBodyScroll("enable");
+
+  event.target.focus();
+};
+
+const handleLightbox = ({ event, elements }) => {
+  const { lightbox, topHeader, mainContainer } = elements;
+
+  const isActive = isActiveElement(event.target.dataset);
+  if (!isActive) return;
+
+  toggleLightbox({ event, lightbox });
+
+  topHeader.setAttribute("inert", "");
+  mainContainer.setAttribute("inert", "");
+
+  updateBodyScroll("disable");
+};
+
+const updateProductQuantity = ({ quantity, quantityAmount }) => {
+  quantity.textContent = quantityAmount;
+};
+
 const handleMinusButtonClick = (quantity) => {
-  const quantityAmout = Number(quantity.textContent);
-  if (quantityAmout > 0) quantity.textContent = quantityAmout - 1;
+  const quantityAmount = Number(quantity.textContent);
+  if (quantityAmount > 0)
+    updateProductQuantity({ quantity, quantityAmount: quantityAmount - 1 });
 };
 
 const handlePlusButtonClick = (quantity) => {
-  const quantityAmout = Number(quantity.textContent);
-  quantity.textContent = quantityAmout + 1;
+  const quantityAmount = Number(quantity.textContent);
+  updateProductQuantity({ quantity, quantityAmount: quantityAmount + 1 });
+};
+
+const updateCartBadge = ({ mode, cartBadge, quantity }) => {
+  if (mode === "plus")
+    cartBadge.textContent =
+      parseInt(cartBadge.textContent) + parseInt(quantity);
+  if (mode === "minus")
+    cartBadge.textContent =
+      parseInt(cartBadge.textContent) - parseInt(quantity);
+  if (mode === "replace") cartBadge.textContent = quantity;
+};
+
+const clearCart = ({ cartContent, cartBadge }) => {
+  cartContent.classList.add("empty");
+  cartContent.innerHTML = `
+        <p class="empty-cart-label">Your cart is empty</p>
+      `;
+  cartBadge.textContent = "";
+};
+
+const removeCartItem = ({ cartItems, cartItem, cartBadge, quantity }) => {
+  updateCartBadge({ mode: "plus", cartBadge, quantity });
+  cartItems.removeChild(cartItem);
 };
 
 const handleTrashButtonOnClick = ({
@@ -250,98 +336,38 @@ const handleTrashButtonOnClick = ({
   cartBadge,
 }) => {
   if (cartItems.children.length === 1) {
-    cartContent.classList.add("empty");
-    cartContent.innerHTML = `
-        <p class="empty-cart-label">Your cart is empty</p>
-      `;
-    cartBadge.textContent = "";
-  } else {
-    const cartItemQuantity = cartItem.querySelector(
-      ".cart-item-quantity"
-    ).textContent;
-
-    cartBadge.textContent =
-      parseInt(cartBadge.textContent) - parseInt(cartItemQuantity);
-
-    cartItems.removeChild(cartItem);
-  }
-};
-
-const handleAddToCart = () => {
-  const quantityAmount = quantity.textContent;
-  if (parseInt(quantityAmount) === 0) return;
-
-  const cartContent = cart.querySelector(".cart-content");
-  const productId = mainContent.dataset.productId;
-
-  if (cartContent.classList.contains("empty")) {
-    cartContent.classList.remove("empty");
-    cartContent.innerHTML = "";
-
-    const cartItems = document.createElement("ul");
-    cartItems.classList.add("cart-items");
-
-    const checkoutButton = document.createElement("button");
-    checkoutButton.classList.add("checkout-button");
-    checkoutButton.textContent = "Checkout";
-
-    cartContent.appendChild(cartItems);
-    cartContent.appendChild(checkoutButton);
-  }
-
-  const cartItems = cartContent.querySelector(".cart-items");
-  const cartItem = document.createElement("li");
-  cartItem.classList.add("cart-item");
-  cartItem.dataset.productId = productId;
-
-  if (cartItems.children.length >= 1) {
-    const cartItemsList = [...cartItems.children];
-    cartItemsList.forEach((cartItem) => {
-      if (cartItem.dataset.productId === productId) {
-        const cartItemPrice = cartItem.querySelector(
-          ".cart-item-current-price"
-        ).textContent;
-        const cartItemQuantity = cartItem.querySelector(".cart-item-quantity");
-        const cartItemTotalPrice = cartItem.querySelector(
-          ".cart-item-total-price"
-        );
-
-        cartItemQuantity.textContent =
-          parseInt(cartItemQuantity.textContent) + parseInt(quantityAmount);
-
-        cartItemTotalPrice.textContent = parseFloat(
-          parseFloat(cartItemPrice).toFixed(2) *
-            parseInt(cartItemQuantity.textContent)
-        ).toFixed(2);
-
-        cartBadge.textContent =
-          parseInt(cartBadge.textContent) + parseInt(quantityAmount);
-
-        quantity.textContent = "0";
-      }
-    });
-
+    clearCart({ cartContent, cartBadge });
     return;
   }
 
-  if (cartItems.classList.contains("empty")) {
-    cartItems.classList.remove("empty");
-    cartItems.textContent = "";
-  }
+  const cartItemQuantity = cartItem.querySelector(
+    ".cart-item-quantity"
+  ).textContent;
+  removeCartItem({
+    cartItems,
+    cartItem,
+    cartBadge,
+    quantity: cartItemQuantity,
+  });
+};
 
-  const productThumbnailImage = productImages
-    .querySelector(".product-thumbnail-image-button")
-    .querySelector(".product-thumbnail-image").src;
-  const productName = mainContent
-    .querySelector(".product-name")
-    .textContent.trim();
-  const currentPrice = mainContent
-    .querySelector(".current-price")
-    .textContent.trim()
-    .split("$")[1];
-  const totalPrice = parseFloat(
-    parseFloat(currentPrice).toFixed(2) * parseInt(quantityAmount)
-  ).toFixed(2);
+const createCartItems = () => {
+  const cartItems = document.createElement("ul");
+  cartItems.classList.add("cart-items");
+  return cartItems;
+};
+
+const createCartItem = ({
+  productId,
+  productThumbnailImage,
+  productName,
+  currentPrice,
+  quantityAmount,
+  totalPrice,
+}) => {
+  const cartItem = document.createElement("li");
+  cartItem.classList.add("cart-item");
+  cartItem.dataset.productId = productId;
 
   cartItem.innerHTML = `
     <img class="cart-item-image" src="${productThumbnailImage}" />
@@ -353,6 +379,35 @@ const handleAddToCart = () => {
     </div>
   `;
 
+  return cartItem;
+};
+
+const updateCartItem = ({ cartItem, quantity, quantityAmount }) => {
+  const cartItemPrice = cartItem.querySelector(
+    ".cart-item-current-price"
+  ).textContent;
+  const cartItemQuantity = cartItem.querySelector(".cart-item-quantity");
+  const cartItemTotalPrice = cartItem.querySelector(".cart-item-total-price");
+
+  cartItemQuantity.textContent =
+    parseInt(cartItemQuantity.textContent) + parseInt(quantityAmount);
+
+  cartItemTotalPrice.textContent = convertToPrice(
+    convertToPrice(cartItemPrice) * parseInt(cartItemQuantity.textContent)
+  );
+
+  updateCartBadge({ mode: "plus", cartBadge, quantity: quantityAmount });
+
+  updateProductQuantity({ quantity, quantityAmount: "0" });
+};
+
+const createTrashIcon = ({
+  cartContent,
+  cartItems,
+  cartItem,
+  cartBadge,
+  handleTrashButtonOnClick,
+}) => {
   const trashButton = document.createElement("button");
   trashButton.classList.add("trash-icon-button");
   trashButton.innerHTML = `
@@ -363,16 +418,84 @@ const handleAddToCart = () => {
     handleTrashButtonOnClick({ cartContent, cartItems, cartItem, cartBadge })
   );
 
+  return trashButton;
+};
+
+const createCheckButton = () => {
+  const checkoutButton = document.createElement("button");
+  checkoutButton.classList.add("checkout-button");
+  checkoutButton.textContent = "Checkout";
+  return checkoutButton;
+};
+
+const handleAddToCart = () => {
+  const quantityAmount = quantity.textContent;
+  if (parseInt(quantityAmount) === 0) return;
+
+  const cartContent = cart.querySelector(".cart-content");
+  const productId = mainContent.dataset.productId;
+
+  const isCartContentEmpty = cartContent.classList.contains("empty");
+
+  if (isCartContentEmpty) {
+    cartContent.classList.remove("empty");
+    cartContent.innerHTML = "";
+
+    const cartItems = createCartItems();
+    const checkoutButton = createCheckButton();
+
+    cartContent.appendChild(cartItems);
+    cartContent.appendChild(checkoutButton);
+  }
+
+  const cartItems = cartContent.querySelector(".cart-items");
+
+  if (cartItems.children.length >= 1) {
+    const cartItemsList = [...cartItems.children];
+    cartItemsList.forEach((cartItem) => {
+      if (cartItem.dataset.productId === productId)
+        updateCartItem({ cartItem, quantity, quantityAmount });
+    });
+    return;
+  }
+
+  const productThumbnailImage = productImages
+    .querySelector(".product-thumbnail-image-button")
+    .querySelector(".product-thumbnail-image").src;
+  const productName = mainContent
+    .querySelector(".product-name")
+    .textContent.trim();
+  const currentPrice = convertToPrice(
+    mainContent.querySelector(".current-price").textContent.trim().split("$")[1]
+  );
+  const totalPrice = convertToPrice(currentPrice * parseInt(quantityAmount));
+
+  const cartItem = createCartItem({
+    productId,
+    productThumbnailImage,
+    productName,
+    currentPrice,
+    quantityAmount,
+    totalPrice,
+  });
+
+  const trashButton = createTrashIcon({
+    cartContent,
+    cartItems,
+    cartItem,
+    cartBadge,
+    handleTrashButtonOnClick,
+  });
+
   cartItem.appendChild(trashButton);
   cartItems.appendChild(cartItem);
 
-  if (cartItems.children.length > 1) {
-    cartBadge.textContent =
-      parseInt(cartBadge.textContent) + parseInt(quantityAmount);
-  } else {
-    cartBadge.textContent = quantityAmount;
-  }
-  quantity.textContent = "0";
+  if (cartItems.children.length > 1)
+    updateCartBadge({ mode: "plus", cartBadge, quantity: quantityAmount });
+  else
+    updateCartBadge({ mode: "replace", cartBadge, quantity: quantityAmount });
+
+  updateProductQuantity({ quantity, quantityAmount: "0" });
 };
 
 const handleResize = (event) => {
@@ -395,24 +518,62 @@ const handleResize = (event) => {
   }
 };
 
-openMenuButton.addEventListener("click", openMenu);
-closeMenuButton.addEventListener("click", closeMenu);
+const handleWindowOnScroll = ({ cart }) => disableCart({ cart });
 
-cart.addEventListener("click", handleCart);
+const handleWindowOnLoad = () => {
+  if (media.matches) navigationContent.setAttribute("inert", "");
+  else navigationContent.removeAttribute("inert");
+};
+
+openMenuButton.addEventListener("click", () =>
+  openMenu({
+    elements: {
+      openMenuButton,
+      closeMenuButton,
+      navigationContent,
+      navigationOverlay,
+      userContainer,
+      mainContainer,
+    },
+  })
+);
+closeMenuButton.addEventListener("click", () =>
+  closeMenu({
+    elements: {
+      openMenuButton,
+      closeMenuButton,
+      navigationContent,
+      navigationOverlay,
+      userContainer,
+      mainContainer,
+    },
+  })
+);
+
+cart.addEventListener("click", (event) => handleCart({ event, cart }));
 
 carouselButtons.forEach((carouselButton) =>
   carouselButton.addEventListener("click", (event) =>
-    handleCarouselButton(event)
+    handleCarouselButton({ event, elements: { lightbox, productImages } })
   )
 );
 
 carouselItems.forEach((carouselItem) => {
-  carouselItem.addEventListener("click", (event) => handleLightbox(event));
+  carouselItem.addEventListener("click", (event) =>
+    handleLightbox({ event, elements: { lightbox, topHeader, mainContainer } })
+  );
 });
+
+closeLightboxButton.addEventListener("click", (event) =>
+  handleLightboxCloseButtonClick({ event, lightbox })
+);
 
 productThumbnailImageButtons.forEach((productThumbnailImageButton) => {
   productThumbnailImageButton.addEventListener("click", (event) =>
-    handleProductThumbnailImageButtonClick(event)
+    handleProductThumbnailImageButtonClick({
+      event,
+      elements: { lightbox, productImages },
+    })
   );
 });
 
@@ -424,16 +585,7 @@ plusQuantityButton.addEventListener("click", () =>
 );
 addToCartButton.addEventListener("click", () => handleAddToCart());
 
-window.addEventListener("scroll", () => {
-  if (cart.dataset.active) delete cart.dataset.active;
-});
-
-window.addEventListener("load", (event) => {
-  if (media.matches) {
-    navigationContent.setAttribute("inert", "");
-  } else {
-    navigationContent.removeAttribute("inert");
-  }
-});
+window.addEventListener("scroll", () => handleWindowOnScroll({ cart }));
+window.addEventListener("load", handleWindowOnLoad);
 
 media.addEventListener("change", handleResize);

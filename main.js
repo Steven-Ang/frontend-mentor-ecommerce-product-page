@@ -110,7 +110,7 @@ const closeMenu = ({ elements }) => {
 };
 
 const toggleCart = ({ cart, cartBadge, cartIcon }) => {
-  const cartContent = cart.querySelector("cart");
+  const cartContent = cart.querySelector(".cart");
 
   if (cart.dataset.active) {
     cart.setAttribute("aria-expanded", "false");

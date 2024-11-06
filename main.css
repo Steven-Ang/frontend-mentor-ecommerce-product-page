@@ -928,7 +928,7 @@ button[data-carousel-button]:is(:hover, :active, :focus) > svg path {
 
   .add-to-cart-button {
     padding: 1.2em 0;
-    box-shadow: 2px 20px 53px -15px var(--primary-color-1);
+    box-shadow: 0.125em 1.25em 3.3125em -0.9375em var(--primary-color-1);
   }
 }
 

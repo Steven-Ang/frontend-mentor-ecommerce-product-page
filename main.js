@@ -126,7 +126,8 @@ const handleCart = ({ event, cart, cartBadge, cartIcon }) => {
   const isOutside =
     !event.target.classList.contains("cart-button") &&
     !event.target.classList.contains("cart-icon") &&
-    !event.target.classList.contains("cart-icon-path");
+    !event.target.classList.contains("cart-icon-path") &&
+    !event.target.classList.contains("cart-badge");
   if (isOutside) return;
 
   toggleCart({ cart, cartBadge, cartIcon });

@@ -429,7 +429,7 @@ const createCartItem = ({
       <div class="cart-item-labels">
         <p class="cart-item-name">${productName}</p>
         <p class="cart-item-price">
-          $<span class="cart-item-current-price">${currentPrice}</span> x <span class="cart-item-quantity">${quantityAmount}</span> $<span class="cart-item-total-price">${totalPrice}</span>
+          $<span class="cart-item-current-price">${currentPrice}</span> x <span class="cart-item-quantity">${quantityAmount}</span> <span class="bold">$</span><span class="cart-item-total-price">${totalPrice}</span>
         </p>
       </div>
     </div>

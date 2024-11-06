@@ -99,6 +99,17 @@ ul {
   content: "";
 }
 
+.navigation-link:is(:hover, :active, :focus) {
+  color: var(--neutral-color-1);
+  transition: color 0.2s ease-in;
+}
+
+@media (prefers-reduced-motion) {
+  .navigation-link:is(:hover, :active, :focus) {
+    transition: none;
+  }
+}
+
 .navigation-link:is(:hover, :active, :focus)::after {
   display: block;
   width: 100%;
@@ -115,6 +126,7 @@ ul {
   }
 }
 
+.open-menu-button,
 .open-menu-button,
 .close-menu-button,
 .navigation-overlay {
@@ -152,7 +164,7 @@ ul {
   }
 }
 
-.cart-icon[data-active=true] .cart-icon-path {
+.cart-icon[data-active="true"] .cart-icon-path {
   fill: var(--neutral-color-1);
 }
 
@@ -359,6 +371,7 @@ ul {
     font-weight: bold;
     gap: 2em;
     font-size: 1.1em;
+    color: var(--neutral-color-1);
   }
 
   .navigation-item {

@@ -693,9 +693,14 @@ button[data-carousel-button]:is(:hover, :active, :focus) > svg path {
 }
 
 .brand-name {
+  font-size: 0.8em;
   font-weight: bold;
   letter-spacing: 0.2ch;
   text-transform: uppercase;
+}
+
+.product-description {
+  line-height: 1.6;
 }
 
 .price-container {
@@ -712,6 +717,16 @@ button[data-carousel-button]:is(:hover, :active, :focus) > svg path {
 .product-name,
 .current-price {
   color: var(--neutral-color-1);
+}
+
+.product-name {
+  margin-bottom: 0.4em;
+}
+
+@media (width < 52em) {
+  .product-name {
+    margin-bottom: 0;
+  }
 }
 
 .discount {

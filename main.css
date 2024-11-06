@@ -9,6 +9,7 @@
   --neutral-color-5: hsl(0, 0%, 0%);
 
   --white-color: var(--neutral-color-4);
+  --top-header-border-color: hsl(208, 25%, 85%);
   --overlay-color: var(--neutral-color-5);
   --quantity-container-background-color: hsl(220, 14%, 75%, 0.1);
   --primary-color-1-active: hsl(26, 100%, 74%);
@@ -65,7 +66,8 @@ ul {
   width: 85%;
   padding: 2em 0;
   margin: 0 4em;
-  border-bottom: 0.125em solid lightgray;
+  border-bottom: 0.0625em solid var(--top-header-border-color);
+  background-color: var(--white-color);
 }
 
 .logo-container {
@@ -171,10 +173,9 @@ ul {
 .cart {
   position: absolute;
   opacity: 0;
-  width: 20em;
+  width: 22em;
   background-color: var(--white-color);
   top: 3em;
-  left: 50%;
   transform: translateX(-50%);
   z-index: -1;
   box-shadow: 0.125em 0.9375em 1.4375em 0.8125em rgba(0, 0, 0, 0.1);
@@ -235,28 +236,50 @@ ul {
 
 .cart-item {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 1em;
 }
 
-.cart-item > .cart-item-image {
+.cart-item-content {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+.cart-item-content > .cart-item-image {
   width: 4em;
   border-radius: 0.4em;
 }
 
-.cart-item > .cart-item-labels {
+.cart-item-content > .cart-item-labels {
   display: flex;
   flex-direction: column;
   gap: 0.4em;
   text-align: left;
 }
 
-.cart-item > .cart-item-labels .cart-item-total-price {
+.cart-item-content > .cart-item-labels .cart-item-total-price {
   font-weight: bold;
 }
 
 .cart-item > .trash-icon {
   width: 2em;
+}
+
+.trash-icon-button {
+  display: flex;
+}
+
+.trash-icon:is(:hover, :active, :focus) path {
+  fill: var(--primary-color-1);
+  transition: fill 0.2s ease-in;
+}
+
+@media (prefers-reduced-motion) {
+  .trash-icon:is(:hover, :active, :focus) path {
+    transition: none;
+  }
 }
 
 .checkout-button {
@@ -293,6 +316,7 @@ ul {
     position: fixed;
     top: 8em;
     width: 90vw;
+    left: 50%;
   }
 }
 
@@ -301,6 +325,8 @@ ul {
     width: 100%;
     padding: 2em;
     border: none;
+    position: fixed;
+    z-index: 2;
   }
 
   .open-menu-button,
@@ -626,7 +652,7 @@ button[data-carousel-button]:is(:hover, :active, :focus) > svg path {
   border: 0.1875em solid var(--primary-color-1);
   outline: none;
   border-radius: 0.6em;
-  background-color: white;
+  background-color: var(--white-color);
   transition: border 0.2s ease-out;
   transition: background-color 0.22s ease-out;
 }
@@ -794,6 +820,7 @@ button[data-carousel-button]:is(:hover, :active, :focus) > svg path {
     grid-template-columns: 1fr;
     margin: 0 0 2em;
     gap: 2em;
+    margin-top: 6.375em;
   }
 
   .product-thumbnail-images {

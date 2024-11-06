@@ -116,7 +116,7 @@ const toggleCart = ({ cart, cartBadge, cartIcon }) => {
     cart.setAttribute("aria-expanded", "false");
     delete cart.dataset.active;
 
-    cartContent.removeAttribute("inert");
+    cartContent.setAttribute("inert", "");
     cartContent.setAttribute("aria-hidden", "true");
 
     if (!isCartBadgeEmpty(cartBadge))
@@ -127,7 +127,7 @@ const toggleCart = ({ cart, cartBadge, cartIcon }) => {
     cart.setAttribute("aria-expanded", "true");
     cart.dataset.active = true;
 
-    cartContent.setAttribute("inert", "");
+    cartContent.removeAttribute("inert");
     cartContent.setAttribute("aria-hidden", "false");
 
     updateCartIcon({ mode: "active", cartIcon });

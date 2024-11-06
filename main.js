@@ -109,15 +109,27 @@ const closeMenu = ({ elements }) => {
   openMenuButton.focus();
 };
 
-const toggleCart = ({ mode, cart, cartBadge, cartIcon }) => {
+const toggleCart = ({ cart, cartBadge, cartIcon }) => {
+  const cartContent = cart.querySelector("cart");
+
   if (cart.dataset.active) {
+    cart.setAttribute("aria-expanded", "false");
     delete cart.dataset.active;
+
+    cartContent.removeAttribute("inert");
+    cartContent.setAttribute("aria-hidden", "true");
+
     if (!isCartBadgeEmpty(cartBadge))
       updateCartIcon({ mode: "active", cartIcon });
     if (isCartBadgeEmpty(cartBadge))
       updateCartIcon({ mode: "inactive", cartIcon });
   } else {
+    cart.setAttribute("aria-expanded", "true");
     cart.dataset.active = true;
+
+    cartContent.setAttribute("inert", "");
+    cartContent.setAttribute("aria-hidden", "false");
+
     updateCartIcon({ mode: "active", cartIcon });
   }
 };
@@ -138,10 +150,106 @@ const changeActiveProductImage = ({ currentActiveImage, newActiveImage }) => {
   newActiveImage.dataset.active = true;
 };
 
+const changeThumbnailsImages = ({ elements }) => {
+  const {
+    currentLightboxActiveImage,
+    newLightboxActiveImage,
+    currentProductImagesActiveImage,
+    newProductImagesActiveImage,
+  } = elements;
+
+  changeActiveProductImage({
+    currentActiveImage: currentLightboxActiveImage,
+    newActiveImage: newLightboxActiveImage,
+  });
+  changeActiveProductImage({
+    currentActiveImage: currentProductImagesActiveImage,
+    newActiveImage: newProductImagesActiveImage,
+  });
+};
+
+const changeCarouselSlide = ({ elements }) => {
+  const {
+    button,
+    lightboxSlides,
+    productImagesSlides,
+    activeLightboxSlide,
+    activeProductImagesSlide,
+    lightboxActiveProductThumbnailImage,
+    lightBoxThumbnaillImages,
+    productImagesActiveProductThumbnailImage,
+    productThumbnailImages,
+  } = elements;
+
+  const isCarouselButton = button.dataset.carouselButton;
+  const isThumbnailButton = button.dataset.productImage;
+
+  let offset = null;
+  if (isCarouselButton)
+    offset = button.dataset.carouselButton === "next" ? 1 : -1;
+
+  let newIndex = null;
+  const imagesSlides = isLightbox(button)
+    ? lightboxSlides
+    : [...productImagesSlides.children];
+  const activeSlide = isLightbox(button)
+    ? activeLightboxSlide
+    : activeProductImagesSlide;
+
+  let newActiveLightboxSlide = null;
+  let newActiveProductImagesSlide = null;
+  let newLightboxActiveThumbnailImage = null;
+  let newProductImagesActiveThumbnailImage = null;
+
+  if (isCarouselButton) {
+    newIndex = imagesSlides.indexOf(activeSlide) + offset;
+    if (newIndex < 0) newIndex = imagesSlides.length - 1;
+    if (newIndex >= imagesSlides.length) newIndex = 0;
+
+    newActiveLightboxSlide = lightboxSlides[newIndex];
+    newActiveProductImagesSlide = productImagesSlides.children[newIndex];
+    newLightboxActiveThumbnailImage =
+      lightBoxThumbnaillImages.children[newIndex].firstElementChild;
+    newProductImagesActiveThumbnailImage =
+      productThumbnailImages.children[newIndex].firstElementChild;
+  }
+
+  if (isThumbnailButton) {
+    newActiveLightboxSlide = lightboxSlides.find(
+      (slide) => slide.dataset.productImage === button.dataset.productImage
+    );
+    newActiveProductImagesSlide = productImages.querySelector(
+      `[data-product-image="${button.dataset.productImage}"]`
+    );
+    newLightboxActiveThumbnailImage = lightBoxThumbnaillImages.querySelector(
+      `[data-product-image="${button.dataset.productImage}"]`
+    );
+    newProductImagesActiveThumbnailImage = productThumbnailImages.querySelector(
+      `[data-product-image="${button.dataset.productImage}"]`
+    );
+  }
+
+  changeActiveProductImage({
+    currentActiveImage: activeLightboxSlide,
+    newActiveImage: newActiveLightboxSlide,
+  });
+  changeActiveProductImage({
+    currentActiveImage: activeProductImagesSlide,
+    newActiveImage: newActiveProductImagesSlide,
+  });
+
+  changeThumbnailsImages({
+    elements: {
+      currentLightboxActiveImage: lightboxActiveProductThumbnailImage,
+      newLightboxActiveImage: newLightboxActiveThumbnailImage,
+      currentProductImagesActiveImage: productImagesActiveProductThumbnailImage,
+      newProductImagesActiveImage: newProductImagesActiveThumbnailImage,
+    },
+  });
+};
+
 const handleCarouselButton = ({ event, elements }) => {
   const { lightbox, productImages } = elements;
-
-  const offset = event.target.dataset.carouselButton === "next" ? 1 : -1;
 
   const lightBoxThumbnaillImages = lightbox.querySelector(
     "[data-product-thumbnail-images]"
@@ -165,100 +273,19 @@ const handleCarouselButton = ({ event, elements }) => {
   const productImagesActiveProductThumbnailImage =
     productThumbnailImages.querySelector("[data-active]");
 
-  let newIndex = null;
-  const imagesSlides = isLightbox(event.target)
-    ? filteredLightboxSlides
-    : [...productImagesSlides.children];
-  const activeSlide = isLightbox(event.target)
-    ? activeLightboxSlide
-    : activeProductImagesSlide;
-
-  newIndex = imagesSlides.indexOf(activeSlide) + offset;
-  if (newIndex < 0) newIndex = imagesSlides.length - 1;
-  if (newIndex >= imagesSlides.length) newIndex = 0;
-
-  changeActiveProductImage({
-    currentActiveImage: activeLightboxSlide,
-    newActiveImage: filteredLightboxSlides[newIndex],
+  changeCarouselSlide({
+    elements: {
+      button: event.target,
+      lightboxSlides: filteredLightboxSlides,
+      productImagesSlides,
+      activeLightboxSlide,
+      activeProductImagesSlide,
+      lightboxActiveProductThumbnailImage,
+      lightBoxThumbnaillImages,
+      productImagesActiveProductThumbnailImage,
+      productThumbnailImages,
+    },
   });
-  changeActiveProductImage({
-    currentActiveImage: activeProductImagesSlide,
-    newActiveImage: productImagesSlides.children[newIndex],
-  });
-
-  changeActiveProductImage({
-    currentActiveImage: lightboxActiveProductThumbnailImage,
-    newActiveImage:
-      lightBoxThumbnaillImages.children[newIndex].firstElementChild,
-  });
-  changeActiveProductImage({
-    currentActiveImage: productImagesActiveProductThumbnailImage,
-    newActiveImage: productThumbnailImages.children[newIndex].firstElementChild,
-  });
-};
-
-const handleProductThumbnailImageButtonClick = ({ event, elements }) => {
-  const { lightbox, productImages } = elements;
-
-  const button = event.target;
-
-  const lightboxSlide = lightbox.querySelector(
-    `[data-product-image="${button.dataset.productImage}"]`
-  );
-  const productImageSlide = productImages.querySelector(
-    `[data-product-image="${button.dataset.productImage}"]`
-  );
-
-  const lightBoxThumbnaillImages = lightbox.querySelector(
-    "[data-product-thumbnail-images]"
-  );
-  const productThumbnailImages = productImages.querySelector(
-    "[data-product-thumbnail-images]"
-  );
-
-  const lightBoxThumbnaillImage = lightBoxThumbnaillImages.querySelector(
-    `[data-product-image="${button.dataset.productImage}"]`
-  );
-  const productThumbnailImage = productThumbnailImages.querySelector(
-    `[data-product-image="${button.dataset.productImage}"]`
-  );
-
-  const lightboxActiveProductThumbnailImage =
-    lightBoxThumbnaillImages.querySelector("[data-active]");
-  const productImagesActiveProductThumbnailImage =
-    productThumbnailImages.querySelector("[data-active]");
-
-  const lightboxSlides = lightbox.querySelector("[data-slides]");
-  const productImagesSlides = productImages.querySelector("[data-slides]");
-
-  const activeLightboxSlide = lightboxSlides.querySelector("[data-active]");
-  const activeProductImagesSlide =
-    productImagesSlides.querySelector("[data-active]");
-
-  const isDifferentImage =
-    (isLightbox(event.target) &&
-      button !== lightboxActiveProductThumbnailImage) ||
-    (!isLightbox(event.target) &&
-      button !== productImagesActiveProductThumbnailImage);
-
-  if (isDifferentImage) {
-    changeActiveProductImage({
-      currentActiveImage: activeLightboxSlide,
-      newActiveImage: lightboxSlide,
-    });
-    changeActiveProductImage({
-      currentActiveImage: activeProductImagesSlide,
-      newActiveImage: productImageSlide,
-    });
-    changeActiveProductImage({
-      currentActiveImage: lightboxActiveProductThumbnailImage,
-      newActiveImage: lightBoxThumbnaillImage,
-    });
-    changeActiveProductImage({
-      currentActiveImage: productImagesActiveProductThumbnailImage,
-      newActiveImage: productThumbnailImage,
-    });
-  }
 };
 
 const toggleLightbox = ({ lightbox }) => {
@@ -646,7 +673,7 @@ closeLightboxButton.addEventListener("click", (event) =>
 
 productThumbnailImageButtons.forEach((productThumbnailImageButton) => {
   productThumbnailImageButton.addEventListener("click", (event) =>
-    handleProductThumbnailImageButtonClick({
+    handleCarouselButton({
       event,
       elements: { lightbox, productImages },
     })

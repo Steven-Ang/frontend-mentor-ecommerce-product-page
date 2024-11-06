@@ -92,7 +92,7 @@
       </div>
 
       <div class="user-container">
-        <button id="cart-button" class="cart-button">
+        <button id="cart-button" class="cart-button" aria-expanded="false">
           <span class="cart-badge"></span>
           <svg
             class="cart-icon"
@@ -108,7 +108,7 @@
             />
           </svg>
 
-          <section class="cart">
+          <section class="cart" aria-hidden="true">
             <h2 class="cart-heading">Cart</h2>
             <div class="cart-content empty">
               <p class="empty-cart-label">Your cart is empty</p>
@@ -146,7 +146,11 @@
         </div>
 
         <ul class="carousel-list" data-slides>
-          <button class="previous-button" data-carousel-button="previous">
+          <button
+            class="previous-button"
+            data-carousel-button="previous"
+            aria-label="Previous product image"
+          >
             <svg
               class="previous-button-icon"
               width="12"
@@ -163,7 +167,11 @@
             </svg>
           </button>
 
-          <button class="next-button" data-carousel-button="next">
+          <button
+            class="next-button"
+            data-carousel-button="next"
+            aria-label="Next product image"
+          >
             <svg
               class="next-button-icon"
               width="13"
@@ -274,7 +282,11 @@
     <main class="main" aria-labelledby="product-name">
       <div class="product-images-container" data-product-images>
         <div class="carousel" data-carousel>
-          <button class="previous-button" data-carousel-button="previous">
+          <button
+            class="previous-button"
+            data-carousel-button="previous"
+            aria-label="Previous product image"
+          >
             <svg
               class="previous-button-icon"
               width="12"
@@ -290,7 +302,11 @@
               />
             </svg>
           </button>
-          <button class="next-button" data-carousel-button="next">
+          <button
+            class="next-button"
+            data-carousel-button="next"
+            aria-label="Next product image"
+          >
             <svg
               class="next-button-icon"
               width="13"
@@ -421,7 +437,7 @@
             <button
               id="minus-quantity-button"
               class="minus-quantity-button"
-              aria-label="Minus button"
+              aria-label="Minus"
             >
               <svg
                 class="minus-quantity-button-icon"
@@ -443,7 +459,7 @@
             <button
               id="plus-quantity-button"
               class="plus-quantity-button"
-              aria-label="Plus button"
+              aria-label="Plus"
             >
               <svg
                 class="plus-quantity-button-icon"

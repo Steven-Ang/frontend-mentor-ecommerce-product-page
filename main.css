@@ -294,6 +294,10 @@ ul {
   background-color: var(--primary-color-1-active);
 }
 
+.profile-button {
+  display: flex;
+}
+
 .profile-button:is(:hover, :active, :focus) > .avatar {
   border-radius: 100%;
   border: 0.125em solid var(--primary-color-1);
@@ -343,7 +347,7 @@ ul {
     order: 1;
   }
 
-  .logo {
+  .logo-link {
     order: 2;
   }
 

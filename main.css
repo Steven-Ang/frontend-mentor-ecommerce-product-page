@@ -263,10 +263,6 @@ ul {
   font-weight: bold;
 }
 
-.cart-item > .trash-icon {
-  width: 2em;
-}
-
 .trash-icon-button {
   display: flex;
 }

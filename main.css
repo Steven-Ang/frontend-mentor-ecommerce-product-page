@@ -10,6 +10,7 @@
 
   --white-color: var(--neutral-color-4);
   --top-header-border-color: hsl(208, 25%, 85%);
+  --cart-heading-border-color: hsl(208, 25%, 85%);
   --overlay-color: var(--neutral-color-5);
   --quantity-container-background-color: hsl(220, 14%, 75%, 0.1);
   --primary-color-1-active: hsl(26, 100%, 74%);
@@ -22,6 +23,7 @@
   margin: 0;
   padding: 0;
   outline-color: var(--primary-color-1-active);
+  font-family: "Kumbh Sans", Arial, Helvetica, sans-serif;
 }
 
 html {
@@ -33,7 +35,6 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 6em;
-  font-family: "Kumbh Sans", Arial, Helvetica, sans-serif;
   min-height: 100%;
   color: var(--neutral-color-2);
   background-color: var(--white-color);
@@ -203,7 +204,7 @@ ul {
 
 .cart-heading {
   font-size: 1.2em;
-  border-bottom: 0.0625em solid var(--neutral-color-3);
+  border-bottom: 0.0625em solid var(--cart-heading-border-color);
   text-align: left;
   padding: 1em;
 }

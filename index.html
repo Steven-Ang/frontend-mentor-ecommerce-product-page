@@ -92,7 +92,12 @@
       </div>
 
       <div class="user-container">
-        <button id="cart-button" class="cart-button" aria-label="Cart" aria-expanded="false">
+        <button
+          id="cart-button"
+          class="cart-button"
+          aria-label="Cart"
+          aria-expanded="false"
+        >
           <span class="cart-badge"></span>
           <svg
             class="cart-icon"
@@ -108,7 +113,7 @@
             />
           </svg>
 
-          <div class="cart" aria-hidden="true">
+          <div class="cart" aria-hidden="true" aria-modal="true">
             <h2 class="cart-heading">Cart</h2>
             <div class="cart-content empty">
               <p class="empty-cart-label">Your cart is empty</p>
@@ -127,7 +132,7 @@
       </div>
     </header>
 
-    <div class="lightbox" data-lightbox="true" aria-hidden="true">
+    <div class="lightbox" data-lightbox="true" aria-hidden="true" aria-modal="true">
       <div class="carousel" data-carousel>
         <div class="close-lightbox-button-container">
           <button
@@ -222,10 +227,7 @@
           </li>
         </ul>
 
-        <div
-          class="product-thumbnail-images"
-          data-product-thumbnail-images
-        >
+        <div class="product-thumbnail-images" data-product-thumbnail-images>
           <div class="border-wrapper">
             <button
               class="product-thumbnail-image-button"
@@ -357,10 +359,7 @@
             </li>
           </ul>
         </div>
-        <div
-          class="product-thumbnail-images"
-          data-product-thumbnail-images
-        >
+        <div class="product-thumbnail-images" data-product-thumbnail-images>
           <div class="border-wrapper">
             <button
               class="product-thumbnail-image-button"

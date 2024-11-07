@@ -246,7 +246,7 @@ const changeCarouselSlide = ({ elements }) => {
   });
 };
 
-const handleCarouselButton = ({ event, elements }) => {
+const handleCarousel = ({ event, elements }) => {
   const { lightbox, productImages } = elements;
 
   const lightBoxThumbnaillImages = lightbox.querySelector(
@@ -260,7 +260,7 @@ const handleCarouselButton = ({ event, elements }) => {
   const productImagesSlides = productImages.querySelector("[data-slides]");
 
   const filteredLightboxSlides = [...lightboxSlides.children].filter(
-    (slide) => slide.nodeName === "LI"
+    (slide) => slide.classList.contains("carousel-item")
   );
 
   const activeLightboxSlide = lightboxSlides.querySelector("[data-active]");
@@ -604,7 +604,7 @@ const handleResize = (event) => {
 const handleWindowOnLoad = ({ elements }) => {
   const { lightbox, cart, navigationContent, navigationOverlay } = elements;
 
-  const cartContent = cart.querySelector(".cart")
+  const cartContent = cart.querySelector(".cart");
 
   lightbox.setAttribute("inert", "");
   cartContent.setAttribute("inert", "");
@@ -650,7 +650,7 @@ cart.addEventListener("click", (event) =>
 
 carouselButtons.forEach((carouselButton) =>
   carouselButton.addEventListener("click", (event) =>
-    handleCarouselButton({ event, elements: { lightbox, productImages } })
+    handleCarousel({ event, elements: { lightbox, productImages } })
   )
 );
 
@@ -666,7 +666,7 @@ closeLightboxButton.addEventListener("click", (event) =>
 
 productThumbnailImageButtons.forEach((productThumbnailImageButton) => {
   productThumbnailImageButton.addEventListener("click", (event) =>
-    handleCarouselButton({
+    handleCarousel({
       event,
       elements: { lightbox, productImages },
     })

@@ -361,13 +361,13 @@ const updateCartBadge = ({ mode, cartBadge, cartIcon, quantity }) => {
     updateCartIcon({ mode: "active", cartIcon });
 };
 
-const clearCart = ({ cartContent, cartIcon, cartBadge }) => {
+const clearCart = ({ cart, cartContent, cartIcon, cartBadge }) => {
   cartContent.classList.add("empty");
   cartContent.innerHTML = `
         <p class="empty-cart-label">Your cart is empty</p>
       `;
   cartBadge.textContent = "";
-  updateCartIcon({ mode: "inactive", cartIcon });
+  if (!cart.dataset.active) updateCartIcon({ mode: "inactive", cartIcon });
 };
 
 const removeCartItem = ({
@@ -382,6 +382,7 @@ const removeCartItem = ({
 };
 
 const handleTrashButtonOnClick = ({
+  cart,
   cartContent,
   cartItems,
   cartItem,
@@ -389,7 +390,7 @@ const handleTrashButtonOnClick = ({
   cartIcon,
 }) => {
   if (cartItems.children.length === 1) {
-    clearCart({ cartContent, cartBadge, cartIcon });
+    clearCart({ cart, cartContent, cartBadge, cartIcon });
     return;
   }
 
@@ -463,6 +464,7 @@ const updateCartItem = ({ cartItem, cartIcon, quantity, quantityAmount }) => {
 };
 
 const createTrashIcon = ({
+  cart,
   cartContent,
   cartItems,
   cartItem,
@@ -478,6 +480,7 @@ const createTrashIcon = ({
 
   trashButton.addEventListener("click", () =>
     handleTrashButtonOnClick({
+      cart,
       cartContent,
       cartItems,
       cartItem,
@@ -550,6 +553,7 @@ const handleAddToCart = ({ elements }) => {
   });
 
   const trashButton = createTrashIcon({
+    cart,
     cartContent,
     cartItems,
     cartItem,

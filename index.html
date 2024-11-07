@@ -62,11 +62,11 @@
               class="close-menu-button"
               aria-hidden="true"
               aria-label="Close"
-              inert
             >
               <img
                 class="close-menu-button"
                 src="images/icon-close.svg"
+                alt="Close"
                 aria-hidden="false"
               />
             </button>
@@ -93,6 +93,7 @@
 
       <div class="user-container">
         <button id="cart-button" class="cart-button" aria-expanded="false">
+          <span hidden>Cart</span>
           <span class="cart-badge"></span>
           <svg
             class="cart-icon"
@@ -108,7 +109,7 @@
             />
           </svg>
 
-          <section class="cart" aria-hidden="true" inert>
+          <section class="cart" aria-hidden="true">
             <h2 class="cart-heading">Cart</h2>
             <div class="cart-content empty">
               <p class="empty-cart-label">Your cart is empty</p>
@@ -127,7 +128,7 @@
       </div>
     </header>
 
-    <div class="lightbox" data-lightbox="true" aria-hidden="true" inert>
+    <div class="lightbox" data-lightbox="true" aria-hidden="true">
       <div class="carousel" data-carousel>
         <div class="close-lightbox-button-container">
           <button
@@ -146,47 +147,52 @@
         </div>
 
         <ul class="carousel-list" data-slides>
-          <button
-            class="previous-button"
-            data-carousel-button="previous"
-            aria-label="Previous product image"
-          >
-            <svg
-              class="previous-button-icon"
-              width="12"
-              height="18"
-              xmlns="http://www.w3.org/2000/svg"
+          <li>
+            <button
+              class="previous-button"
+              data-carousel-button="previous"
+              aria-label="Previous product image"
             >
-              <path
-                d="M11 1 3 9l8 8"
-                stroke="#1D2026"
-                stroke-width="3"
-                fill="none"
-                fill-rule="evenodd"
-              />
-            </svg>
-          </button>
+              <svg
+                class="previous-button-icon"
+                width="12"
+                height="18"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11 1 3 9l8 8"
+                  stroke="#1D2026"
+                  stroke-width="3"
+                  fill="none"
+                  fill-rule="evenodd"
+                />
+              </svg>
+            </button>
+          </li>
 
-          <button
-            class="next-button"
-            data-carousel-button="next"
-            aria-label="Next product image"
-          >
-            <svg
-              class="next-button-icon"
-              width="13"
-              height="18"
-              xmlns="http://www.w3.org/2000/svg"
+          <li>
+            <button
+              class="next-button"
+              data-carousel-button="next"
+              aria-label="Next product image"
             >
-              <path
-                d="m2 1 8 8-8 8"
-                stroke="#1D2026"
-                stroke-width="3"
-                fill="none"
-                fill-rule="evenodd"
-              />
-            </svg>
-          </button>
+              <svg
+                class="next-button-icon"
+                width="13"
+                height="18"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m2 1 8 8-8 8"
+                  stroke="#1D2026"
+                  stroke-width="3"
+                  fill="none"
+                  fill-rule="evenodd"
+                />
+              </svg>
+            </button>
+          </li>
+
           <li class="carousel-item" data-active data-product-image="1">
             <img
               class="carousel-image"
@@ -219,7 +225,6 @@
 
         <div
           class="product-thumbnail-images"
-          aria-label="Product images"
           data-product-thumbnail-images
         >
           <div class="border-wrapper">
@@ -355,7 +360,6 @@
         </div>
         <div
           class="product-thumbnail-images"
-          aria-label="Product images"
           data-product-thumbnail-images
         >
           <div class="border-wrapper">

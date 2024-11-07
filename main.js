@@ -74,7 +74,6 @@ const openMenu = ({ elements }) => {
 
   updateBodyScroll("disable");
 
-  closeMenuButton.removeAttribute("inert");
   closeMenuButton.focus();
 };
 
@@ -92,7 +91,6 @@ const closeMenu = ({ elements }) => {
   openMenuButton.setAttribute("aria-hidden", "false");
 
   closeMenuButton.setAttribute("aria-hidden", "true");
-  closeMenuButton.setAttribute("inert", "");
 
   setTimeout(() => {
     navigationContent.style.transition = "none";
@@ -604,7 +602,12 @@ const handleResize = (event) => {
 };
 
 const handleWindowOnLoad = ({ elements }) => {
-  const { navigationContent, navigationOverlay } = elements;
+  const { lightbox, cart, navigationContent, navigationOverlay } = elements;
+
+  const cartContent = cart.querySelector(".cart")
+
+  lightbox.setAttribute("inert", "");
+  cartContent.setAttribute("inert", "");
 
   if (media.matches) {
     navigationContent.setAttribute("inert", "");
@@ -683,7 +686,9 @@ addToCartButton.addEventListener("click", () =>
 );
 
 window.addEventListener("load", () =>
-  handleWindowOnLoad({ elements: { navigationContent, navigationOverlay } })
+  handleWindowOnLoad({
+    elements: { cart, lightbox, navigationContent, navigationOverlay },
+  })
 );
 
 media.addEventListener("change", handleResize);
